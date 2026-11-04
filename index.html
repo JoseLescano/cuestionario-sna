@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Interactivo - Sistema Nacional de Abastecimiento (SNA)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        mef: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            600: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-mef-800 selection:text-white">
+
+    <!-- Header Principal -->
+    <header class="bg-mef-900 text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600/30 p-2 rounded-xl border border-blue-400/30">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-blue-300"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight sm:text-xl">Sistema Nacional de Abastecimiento (SNA)</h1>
+                    <p class="text-xs text-blue-200">Plataforma Interactiva de Estudio y Evaluaciones Normativas</p>
+                </div>
+            </div>
+
+            <!-- Marcador en Vivo en Header -->
+            <div class="flex items-center gap-3 text-sm font-medium ml-auto sm:ml-0">
+                <div class="bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                    <span>Correctas: <strong id="score-correct-head">0</strong></span>
+                </div>
+                <div class="bg-rose-950/60 border border-rose-500/40 text-rose-300 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-circle-xmark text-rose-400"></i>
+                    <span>Incorrectas: <strong id="score-wrong-head">0</strong></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Barra de Progreso Global -->
+        <div class="w-full bg-mef-950/80 h-1.5">
+            <div id="progress-bar" class="bg-gradient-to-r from-blue-400 to-emerald-400 h-1.5 transition-all duration-300" style="width: 2%;"></div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+        <!-- Panel de Control y Navegación Lateral (1 Columna en LG) -->
+        <aside class="lg:col-span-1 space-y-6">
+            
+            <!-- Resumen de Progreso -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                    <i class="fa-solid fa-chart-pie text-mef-600"></i> Estado del Examen
+                </h3>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between items-center py-1 border-b border-slate-100">
+                        <span class="text-slate-600">Progreso Total:</span>
+                        <span id="stat-answered" class="font-semibold text-slate-800">0 / 50</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1 border-b border-slate-100">
+                        <span class="text-slate-600">Efectividad:</span>
+                        <span id="stat-accuracy" class="font-semibold text-mef-600">0%</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1">
+                        <span class="text-slate-600">Pregunta Actual:</span>
+                        <span id="stat-current" class="font-bold text-slate-900">1 de 50</span>
+                    </div>
+                </div>
+
+                <button onclick="finishQuiz()" class="w-full mt-4 bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-flag-checkered"></i> Finalizar y Ver Resultados
+                </button>
+            </div>
+
+            <!-- Navegador Rápido de Preguntas (Grid) -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-th text-mef-600"></i> Mapa de Preguntas
+                    </h3>
+                    <span class="text-xs text-slate-500">1-50</span>
+                </div>
+                
+                <!-- Leyenda del Mapa -->
+                <div class="flex items-center justify-between text-[11px] text-slate-500 mb-3 px-1">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-200"></span> Pendiente</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Correcta</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Incorrecta</span>
+                </div>
+
+                <!-- Grid de Botones -->
+                <div id="question-grid" class="grid grid-cols-5 gap-2 max-h-60 overflow-y-auto custom-scrollbar p-1">
+                    <!-- Generado dinámicamente -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Área de la Pregunta y Opciones (3 Columnas en LG) -->
+        <section class="lg:col-span-3 space-y-6">
+            
+            <!-- Card Principal de Pregunta -->
+            <div id="quiz-card" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300">
+                
+                <!-- Encabezado de Pregunta -->
+                <div class="bg-slate-100/70 border-b border-slate-200 p-4 sm:p-5 flex justify-between items-center flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <span id="question-badge" class="bg-mef-800 text-white font-bold px-3 py-1 rounded-lg text-sm">
+                            Pregunta N.º 1
+                        </span>
+                        <span id="topic-badge" class="bg-blue-100 text-mef-800 font-medium px-2.5 py-1 rounded-lg text-xs">
+                            Marco Legal y Rectoría
+                        </span>
+                    </div>
+                    <span class="text-xs text-slate-500 flex items-center gap-1">
+                        <i class="fa-regular fa-lightbulb text-amber-500"></i> Selecciona una alternativa
+                    </span>
+                </div>
+
+                <div class="p-5 sm:p-7">
+                    <!-- Texto de la Pregunta -->
+                    <h2 id="question-text" class="text-base sm:text-lg font-semibold text-slate-900 leading-relaxed mb-6">
+                        Cargando pregunta...
+                    </h2>
+
+                    <!-- Lista de Alternativas (A, B, C, D, E) -->
+                    <div id="options-container" class="space-y-3">
+                        <!-- Las opciones se insertan mediante JavaScript -->
+                    </div>
+
+                    <!-- Panel de Explicación y Retroalimentación Normativa -->
+                    <div id="explanation-box" class="hidden mt-6 p-4 sm:p-5 rounded-xl border transition-all duration-300">
+                        <div class="flex items-start gap-3">
+                            <div id="explanation-icon" class="mt-0.5 text-xl"></div>
+                            <div class="space-y-1">
+                                <h4 id="explanation-title" class="font-bold text-sm sm:text-base"></h4>
+                                <p id="explanation-text" class="text-xs sm:text-sm leading-relaxed"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer de Navegación del Test -->
+                <div class="bg-slate-50 border-t border-slate-200 px-5 py-4 flex justify-between items-center">
+                    <button id="btn-prev" onclick="prevQuestion()" class="px-4 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-medium rounded-xl text-sm transition duration-150 flex items-center gap-2 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-arrow-left"></i> Anterior
+                    </button>
+                    
+                    <span class="text-xs font-semibold text-slate-500 hidden sm:inline" id="footer-counter">
+                        1 / 50
+                    </span>
+
+                    <button id="btn-next" onclick="nextQuestion()" class="px-5 py-2 bg-mef-800 hover:bg-mef-900 text-white font-medium rounded-xl text-sm transition duration-150 flex items-center gap-2 shadow-md">
+                        Siguiente <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Resultados / Finalización -->
+    <div id="results-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center space-y-6 animate-fade-in">
+            <div class="inline-flex p-4 rounded-full bg-blue-50 text-mef-800 text-4xl mb-1">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">¡Evaluación Completada!</h2>
+                <p class="text-slate-500 text-sm mt-1">Has finalizado el repaso sobre el Sistema Nacional de Abastecimiento.</p>
+            </div>
+
+            <!-- Dashboard de Resultados -->
+            <div class="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <div class="text-center">
+                    <span class="block text-xs text-slate-500 uppercase tracking-wider font-medium">Puntaje</span>
+                    <span id="modal-score" class="text-xl sm:text-2xl font-black text-slate-800">0/50</span>
+                </div>
+                <div class="text-center border-x border-slate-200">
+                    <span class="block text-xs text-slate-500 uppercase tracking-wider font-medium">Efectividad</span>
+                    <span id="modal-accuracy" class="text-xl sm:text-2xl font-black text-mef-600">0%</span>
+                </div>
+                <div class="text-center">
+                    <span class="block text-xs text-slate-500 uppercase tracking-wider font-medium">Estado</span>
+                    <span id="modal-status" class="text-xs font-bold px-2 py-1 rounded mt-1 inline-block">--</span>
+                </div>
+            </div>
+
+            <!-- Mensaje Motivacional -->
+            <p id="modal-feedback" class="text-xs sm:text-sm text-slate-600 leading-relaxed italic px-2">
+                --
+            </p>
+
+            <!-- Acciones -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button onclick="restartQuiz()" class="flex-1 bg-mef-800 hover:bg-mef-900 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> Reiniciar Cuestionario
+                </button>
+                <button onclick="closeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium py-2.5 px-4 rounded-xl text-sm transition duration-200">
+                    Revisar Respuestas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script con los Datos de las 50 Preguntas y la Lógica -->
+    <script>
+        const questions = [
+            {
+                id: 1,
+                category: "Marco Legal",
+                question: "¿Cuál es el marco legal normativo que crea y desarrolla el Sistema Nacional de Abastecimiento (SNA) en el Perú?",
+                options: [
+                    "Ley N.º 29158 y Ley N.º 26850",
+                    "Decreto Legislativo N.º 1439 y Reglamento aprobado por D.S. N.º 217-2019-EF",
+                    "Ley N.º 32069 y Directiva N.º 001-2025-EF/54.01",
+                    "Ley N.º 2657 del Instituto Nacional de Administración Pública (INAP)",
+                    "Decreto Supremo N.º 003-2021-EF/54.01 y modificatorias"
+                ],
+                correct: 1,
+                explanation: "El SNA fue reestructurado y creado normativamente mediante el Decreto Legislativo N.º 1439 (publicado en 2018) y su Reglamento fue aprobado a través del Decreto Supremo N.º 217-2019-EF."
+            },
+            {
+                id: 2,
+                category: "Rectoría del SNA",
+                question: "¿Quién ejerce la máxima autoridad técnico-normativa y la rectoría centralizada del SNA?",
+                options: [
+                    "El Organismo Especializado para las Contrataciones Públicas Eficientes (OECE)",
+                    "La Central de Compras Públicas (Perú Compras)",
+                    "La Dirección General de Abastecimiento (DGA) del MEF",
+                    "El Organismo Supervisor de las Contrataciones del Estado (OSCE)",
+                    "Las Oficinas Generales de Administración (OGA) de cada pliego"
+                ],
+                correct: 2,
+                explanation: "La Dirección General de Abastecimiento (DGA) del Ministerio de Economía y Finanzas (MEF) ejerce la autoridad técnico-normativa a nivel nacional y es el ente rector del SNA."
+            },
+            {
+                id: 3,
+                category: "Finalidad del SNA",
+                question: "¿Cuál es la finalidad última y legal que persigue el Sistema Nacional de Abastecimiento?",
+                options: [
+                    "Adquirir bienes al menor costo económico sin considerar la calidad",
+                    "Asegurar el cumplimiento estricto de los procesos de selección sin impugnaciones",
+                    "La provisión estratégica de bienes, servicios y obras para optimizar recursos y lograr Valor Público",
+                    "Centralizar los inventarios en un único almacén a nivel gubernamental",
+                    "Eliminar la participación de empresas privadas en las compras del Estado"
+                ],
+                correct: 2,
+                explanation: "El SNA busca la provisión estratégica de bienes, servicios y obras a lo largo de la cadena de abastecimiento para maximizar el valor del dinero público y garantizar la prestación de servicios a la ciudadanía."
+            },
+            {
+                id: 4,
+                category: "Cadena de Abastecimiento",
+                question: "¿Cuáles son los tres componentes que integran la Cadena de Abastecimiento Público (CAP)?",
+                options: [
+                    "Planeamiento estratégico, Presupuesto público y Control patrimonial",
+                    "Programación Multianual de BSyO, Gestión de Adquisiciones y Administración de Bienes",
+                    "Selección, Subasta inversa y Ejecución contractual",
+                    "Certificación presupuestal, Compromiso y Devengado",
+                    "Indagación de mercado, Cotización y Adjudicación de buena pro"
+                ],
+                correct: 1,
+                explanation: "Los 3 componentes sistémicos de la CAP son: 1) Programación Multianual de Bienes, Servicios y Obras (PMBSO), 2) Gestión de Adquisiciones, y 3) Administración de Bienes."
+            },
+            {
+                id: 5,
+                category: "Antecedentes del SNA",
+                question: "¿Cuál fue la consecuencia principal del periodo de dispersión logística en el Estado (1995-2018)?",
+                options: [
+                    "La disminución de la deuda pública y menor burocracia",
+                    "La eliminación de los catálogos de bienes y la creación de la LOPE",
+                    "La desarticulación de procesos, falta de trazabilidad y ausencia de un catálogo único",
+                    "El aumento exponencial de las compras corporativas efectivas",
+                    "El traspaso directo de funciones de logística a las municipalidades"
+                ],
+                correct: 2,
+                explanation: "Tras la disolución del INAP en 1995, el abastecimiento público quedó atomizado y sin ente rector normativo integral, provocando atomización, sobrecostos e ineficiencias en la gestión."
+            },
+            {
+                id: 6,
+                category: "Principios del SNA",
+                question: "Principio del SNA que busca obtener el mayor beneficio posible por la inversión pública (valor por dinero) y no solo comprar lo más barato:",
+                options: [
+                    "Racionalidad",
+                    "Economía",
+                    "Eficacia",
+                    "Predictibilidad",
+                    "Oportunidad"
+                ],
+                correct: 1,
+                explanation: "El principio de Economía postula el concepto de 'Valor por Dinero', asegurando que los recursos públicos se apliquen obteniendo la óptima combinación de costo, calidad y conveniencia."
+            },
+            {
+                id: 7,
+                category: "Principios del SNA",
+                question: "Principio que garantiza que la provisión de bienes, servicios y obras se efectúe dentro de los plazos programados para evitar paralizaciones:",
+                options: [
+                    "Transparencia",
+                    "Sostenibilidad",
+                    "Oportunidad",
+                    "Eficiencia",
+                    "Racionalidad"
+                ],
+                correct: 2,
+                explanation: "El principio de Oportunidad exige que las contrataciones e insumos se obtengan a tiempo en el momento justo requerido por la entidad para prestar el servicio público."
+            },
+            {
+                id: 8,
+                category: "Principios del SNA",
+                question: "Principio del SNA enfocado en emplear procedimientos lógicos para evitar requerimientos innecesarios o sobredimensionados:",
+                options: [
+                    "Racionalidad",
+                    "Predictibilidad",
+                    "Eficiencia",
+                    "Integración",
+                    "Transparencia"
+                ],
+                correct: 0,
+                explanation: "El principio de Racionalidad demanda que las necesidades sean austeras, justificadas y estrictamente proporcionales al cumplimiento de las metas institucionales."
+            },
+            {
+                id: 9,
+                category: "Institucionalidad",
+                question: "¿Qué rol tiene el OECE dentro del SNA?",
+                options: [
+                    "Administrar de forma exclusiva el sistema presupuestal SIAF-RP",
+                    "Proponer las leyes presupuestales al Congreso",
+                    "Organismo especializado que supervisa contrataciones, administra el SEACE y el RNP",
+                    "Ejecutar la baja patrimonial de bienes en todas las entidades",
+                    "Aprobar el Cuadro Multianual de Necesidades de los Ministerios"
+                ],
+                correct: 2,
+                explanation: "El OECE (Organismo Especializado para las Contrataciones Públicas Eficientes) absorbe y moderniza las funciones de supervisión de compras, gestión del SEACE y el Registro Nacional de Proveedores."
+            },
+            {
+                id: 10,
+                category: "Sistemas Informáticos",
+                question: "¿Cuál es la herramienta informática oficial y obligatoria definida para el registro de las fases de la PMBSO y control de almacenes?",
+                options: [
+                    "SEACE",
+                    "SIGA-MEF",
+                    "SIAF-RP",
+                    "SINABIP",
+                    "PLADICOP"
+                ],
+                correct: 1,
+                explanation: "El SIGA-MEF (Sistema Integrado de Gestión Administrativa) es el aplicativo informático oficial diseñado e implementado para registrar todas las fases de la Cadena de Abastecimiento."
+            },
+            {
+                id: 11,
+                category: "PMBSO",
+                question: "¿Cuál es el horizonte temporal continuo exigido para la Programación Multianual de Bienes, Servicios y Obras (PMBSO)?",
+                options: [
+                    "Anual",
+                    "Mínimo de 2 años",
+                    "Mínimo de 3 años fiscales",
+                    "Exactamente 5 años",
+                    "Coincidente únicamente con el periodo de gestión del Alcalde o Gobernador"
+                ],
+                correct: 2,
+                explanation: "La PMBSO se elabora por un periodo mínimo de 3 años fiscales para alinearse con la Asignación Presupuestaria Multianual (APM) y el Marco Macroeconómico Multianual."
+            },
+            {
+                id: 12,
+                category: "PMBSO",
+                question: "¿Qué documento constituye el producto final e insumo obligatorio para la formulación del Presupuesto Institucional de Apertura (PIA)?",
+                options: [
+                    "El Plan Anual de Contrataciones (PAC)",
+                    "El Cuadro Multianual de Necesidades (CMN)",
+                    "El Plan Operativo Institucional (POI)",
+                    "El Expediente de Contratación",
+                    "El Anexo N.º 5 de modificación"
+                ],
+                correct: 1,
+                explanation: "El Cuadro Multianual de Necesidades (CMN) consolidado es la herramienta donde se cuantifican y valorizan las necesidades, sirviendo de base directa para la asignación del PIA."
+            },
+            {
+                id: 13,
+                category: "PMBSO",
+                question: "Criterio normativo de la PMBSO que exige coherencia entre el CMN y la Asignación Presupuestaria Multianual (APM):",
+                options: [
+                    "Flexibilidad",
+                    "Transparencia",
+                    "Equilibrio",
+                    "Racionalidad",
+                    "Integración"
+                ],
+                correct: 2,
+                explanation: "El criterio de Equilibrio exige que el monto total de necesidades programadas en el CMN no supere el límite del techo presupuestal asignado en la APM comunicada."
+            },
+            {
+                id: 14,
+                category: "PMBSO",
+                question: "En el trinomio de trabajo colaborativo para la PMBSO, ¿qué función le corresponde a la Oficina de Presupuesto?",
+                options: [
+                    "Conducir y consolidar la valorización técnica",
+                    "Proporcionar la APM, informar el PIA y certificar la disponibilidad presupuestal",
+                    "Definir los términos de referencia y especificaciones técnicas",
+                    "Administrar la custodia y entrega de bienes en el almacén",
+                    "Suscribir el Anexo N.º 6 de modificación semanal"
+                ],
+                correct: 1,
+                explanation: "La Oficina de Presupuesto (o la que haga sus veces) garantiza la consistencia financiera informando la APM, validando techos y otorgando la certificación/previsión presupuestaria."
+            },
+            {
+                id: 15,
+                category: "Planeamiento Integrado",
+                question: "¿Qué acción NO forma parte del análisis del Planeamiento Integrado?",
+                options: [
+                    "Analizar la tendencia de consumo histórico",
+                    "Verificar inventarios de existencias en almacén",
+                    "Evaluar el estado de los bienes patrimoniales",
+                    "Determinar la adjudicación directa al proveedor con el precio más bajo",
+                    "Considerar las inversiones registradas en el PMI"
+                ],
+                correct: 3,
+                explanation: "Determinar adjudicaciones directas o elegir proveedores corresponde a la fase de Selección dentro de la Gestión de Adquisiciones, no a la fase de Planeamiento Integrado de Necesidades."
+            },
+            {
+                id: 16,
+                category: "Fases de la PMBSO",
+                question: "La primera fase de la PMBSO es la Fase de Identificación. ¿Hasta qué plazo máximo del año anterior al periodo de programación se realiza?",
+                options: [
+                    "Último día hábil de diciembre",
+                    "Séptimo día hábil de abril",
+                    "Primer día hábil de julio",
+                    "Último día hábil de septiembre",
+                    "Quince días hábiles posteriores al PIA"
+                ],
+                correct: 1,
+                explanation: "La Fase de Identificación concluye a más tardar el séptimo día hábil del mes de abril del año previo al periodo programado."
+            },
+            {
+                id: 17,
+                category: "Fases de la PMBSO",
+                question: "¿Cuál es el plazo establecido para el desarrollo de la Fase de Clasificación y Priorización de la PMBSO?",
+                options: [
+                    "Desde el primer día hábil de julio hasta el último día hábil de septiembre",
+                    "Todo el mes de enero de cada año",
+                    "Del 1 al 15 de diciembre",
+                    "Desde abril hasta junio",
+                    "Durante los primeros 5 días hábiles de cada mes"
+                ],
+                correct: 0,
+                explanation: "Esta segunda fase se ejecuta formalmente entre el primer día hábil del mes de julio y el último día hábil del mes de septiembre."
+            },
+            {
+                id: 18,
+                category: "Priorización",
+                question: "En el orden de prelación para la priorización de necesidades (numeral 13.6), ¿cuál tiene la máxima prioridad (puesto 1)?",
+                options: [
+                    "Las necesidades para atención de servicios públicos estratégicos",
+                    "Previsiones presupuestarias para compromisos futuros",
+                    "Servicios básicos",
+                    "Adquisición de bienes de capital e infraestructura nueva",
+                    "Obligaciones derivadas de contratos vigentes"
+                ],
+                correct: 2,
+                explanation: "Los Servicios Básicos (agua, luz, telefonía, internet, etc.) encabezan la prioridad 1 para garantizar el funcionamiento ininterrumpido de las sedes operativas del Estado."
+            },
+            {
+                id: 19,
+                category: "Aprobación del CMN",
+                question: "¿Dentro de qué plazo tras la aprobación del PIA se debe aprobar formalmente el Cuadro Multianual de Necesidades?",
+                options: [
+                    "5 días hábiles",
+                    "10 días hábiles",
+                    "Dentro de los 15 días hábiles siguientes",
+                    "30 días calendario",
+                    "De manera inmediata el mismo día"
+                ],
+                correct: 2,
+                explanation: "El CMN debe ser aprobado dentro de los 15 días hábiles siguientes a la aprobación del Presupuesto Institucional de Apertura (PIA) de la entidad."
+            },
+            {
+                id: 20,
+                category: "Modificaciones CMN",
+                question: "Formato normativo de la PMBSO utilizado por el Área Usuaria para presentar su solicitud de modificación del CMN:",
+                options: [
+                    "Anexo N.º 1",
+                    "Anexo N.º 3",
+                    "Anexo N.º 5",
+                    "Anexo N.º 6",
+                    "Anexo N.º 2"
+                ],
+                correct: 2,
+                explanation: "El Anexo N.º 5 es la 'Solicitud de Modificación del Cuadro Multianual de Necesidades' que el Área Usuaria debe fundamentar y elevar a la OGA/DEC."
+            },
+            {
+                id: 21,
+                category: "Modificaciones CMN",
+                question: "¿Cómo se aprueba ordinariamente la modificación del CMN (Anexo N.º 6)?",
+                options: [
+                    "Mediante Resolución Ministerial publicada en El Peruano",
+                    "De forma semanal, el último día hábil de cada semana mediante firma del Anexo N.º 6",
+                    "Trimestralmente mediante acuerdo del Concejo Municipal o Directorio",
+                    "Únicamente por el ente rector (DGA)",
+                    "Con una adenda contractual previa enviada al SEACE"
+                ],
+                correct: 1,
+                explanation: "Las modificaciones al CMN se consolidan y aprueban semanalmente (último día hábil de la semana) mediante el Anexo N.º 6 suscrito por el titular o delegado."
+            },
+            {
+                id: 22,
+                category: "Reglas de Convocatoria",
+                question: "¿Qué regla obligatoria establece el Reglamento respecto al CMN modificado y la convocatoria de compras?",
+                options: [
+                    "Para convocar, el requerimiento debe estar previamente aprobado en el CMN modificado (Anexo N.º 6)",
+                    "No es necesario estar en el CMN si se cuenta con presupuesto",
+                    "Se puede incluir la necesidad hasta 30 días después de adjudicada la compra",
+                    "El Anexo N.º 6 solo aplica para contrataciones que superen las 50 UIT",
+                    "Se requiere autorización expresa de la Contraloría General de la República"
+                ],
+                correct: 0,
+                explanation: "Ninguna contratación o compra puede ser convocada si la necesidad no se encuentra formalmente registrada y aprobada previamente en el CMN (o sus modificaciones en Anexo 6)."
+            },
+            {
+                id: 23,
+                category: "CMN y PAC",
+                question: "Respecto a la relación entre el CMN y el Plan Anual de Contrataciones (PAC):",
+                options: [
+                    "El PAC se elabora de forma totalmente autónoma al CMN",
+                    "El CMN es el insumo único para la elaboración y actualización del PAC",
+                    "Solo las obras públicas pasan del CMN al PAC",
+                    "El PAC reemplaza legalmente al CMN a partir del segundo trimestre",
+                    "Las contrataciones menores a 8 UIT son las únicas que pasan al PAC"
+                ],
+                correct: 1,
+                explanation: "El CMN es la fuente técnico-presupuestal directa e insumo único a partir del cual se extraen los procedimientos de selección que integrarán el PAC."
+            },
+            {
+                id: 24,
+                category: "Enfoque del PAC",
+                question: "Según el nuevo marco normativo, el PAC ha transformado su función de un acto administrativo rutinario a:",
+                options: [
+                    "Una lista restrictiva que prohíbe modificaciones presupuestales",
+                    "Un tablero de control que mide la eficiencia real de la gestión, oportunidad y valor por dinero",
+                    "Un informe sancionador de la Contraloría",
+                    "Una plataforma de pago automático a proveedores",
+                    "Un catálogo de precios fijos del mercado"
+                ],
+                correct: 1,
+                explanation: "El PAC actúa actualmente como una herramienta viva de planificación operativa y tablero de control de gestión estratégica de las compras de la entidad."
+            },
+            {
+                id: 25,
+                category: "Excepciones PAC",
+                question: "¿Qué contrataciones están exceptuadas de ser incluidas en el PAC?",
+                options: [
+                    "Las Licitaciones Públicas abreviadas",
+                    "Los procedimientos no competitivos",
+                    "Los contratos menores",
+                    "Las Subastas Inversas Electrónicas",
+                    "Las compras por Acuerdo Marco"
+                ],
+                correct: 2,
+                explanation: "Las contrataciones menores (montos inferiores a 8 UIT o el umbral legal aplicable a contratos menores) no se incluyen de manera obligatoria en la publicación formal del PAC."
+            },
+            {
+                id: 26,
+                category: "Monitoreo PAC",
+                question: "¿Con qué periodicidad obligatoria la DEC debe reportar el avance de la ejecución del PAC a la Autoridad de la Gestión Administrativa?",
+                options: [
+                    "Mensual",
+                    "En los meses de abril, julio y octubre (periódica)",
+                    "Dos veces al año (junio y diciembre)",
+                    "Solo al finalizar el año fiscal",
+                    "Cada vez que se convoque una Licitación"
+                ],
+                correct: 1,
+                explanation: "El reporte periódico del avance del PAC debe enviarse obligatoriamente en los meses de abril, julio y octubre para medir el nivel de cumplimiento."
+            },
+            {
+                id: 27,
+                category: "Indicadores PAC",
+                question: "¿Cuáles son los tres indicadores específicos regulados para la evaluación del PAC por parte de la DGA?",
+                options: [
+                    "Transparencia, Economía y Legalidad",
+                    "Programación, Oportunidad y Nivel de eficacia",
+                    "Velocidad, Combustible y Rumbo",
+                    "Calidad, Menor precio y Capacidad legal",
+                    "Difusión, Consultas y Homologación"
+                ],
+                correct: 1,
+                explanation: "La DGA evalúa la efectividad mediante tres indicadores: 1) Programación, 2) Oportunidad, y 3) Nivel de eficacia acumulado de las contrataciones."
+            },
+            {
+                id: 28,
+                category: "Fases de Contratación",
+                question: "¿Cuáles son las tres fases del proceso de contratación pública?",
+                options: [
+                    "Programación, Adquisición y Almacenamiento",
+                    "Actuaciones Preparatorias, Selección y Ejecución Contractual",
+                    "Convocatoria, Absolución de consultas y Firma de contrato",
+                    "Identificación, Priorización y Consolidación",
+                    "Estimación, Cotización y Pago"
+                ],
+                correct: 1,
+                explanation: "Toda contratación pública atraviesa organizadamente 3 fases: 1. Actuaciones Preparatorias, 2. Procedimiento de Selección, y 3. Ejecución Contractual."
+            },
+            {
+                id: 29,
+                category: "Segmentación",
+                question: "Proceso que consiste en clasificar las contrataciones de bienes y servicios en categorías según su cuantía y riesgo:",
+                options: [
+                    "Homologación",
+                    "Segmentación de contrataciones",
+                    "Estandarización",
+                    "Subasta inversa",
+                    "Catalogación"
+                ],
+                correct: 1,
+                explanation: "La segmentación agrupa y diferencia las compras institucionales considerando su volumen financiero (cuantía) y el impacto operativo (riesgo)."
+            },
+            {
+                id: 30,
+                category: "Segmentación",
+                question: "En la segmentación de bienes y servicios, ¿cuándo se considera que una contratación es de 'Alta Cuantía'?",
+                options: [
+                    "Cuando supera las 500 UIT",
+                    "Cuando supera el 10% del monto total del PAC de bienes y servicios",
+                    "Cuando representa más del 50% del presupuesto de la OGA",
+                    "Cuando su valor es mayor a S/ 2,000,000",
+                    "Siempre que se trate de ejecución de obras"
+                ],
+                correct: 1,
+                explanation: "Se define normativamente como Alta Cuantía cuando el estimado individual supera el 10% del presupuesto asignado al PAC acumulado de la entidad."
+            },
+            {
+                id: 31,
+                category: "Segmentación",
+                question: "¿Cuáles son las 4 categorías resultantes de la segmentación de bienes y servicios según cuantía y riesgo?",
+                options: [
+                    "Mínimas, Medias, Altas y Especiales",
+                    "Estratégicos, Críticos, Operacionales y Rutinarios",
+                    "Básicas, Avanzadas, Complejas e Innovadoras",
+                    "Directas, Competitivas, Abiertas y Cerradas",
+                    "Corrientes, De capital, Financieras y Bienes muebles"
+                ],
+                correct: 1,
+                explanation: "La matriz de Krajlic/Segmentación clasifica los requerimientos en: Estratégicos (Alta cuantía/Alto riesgo), Críticos (Baja cuantía/Alto riesgo), Operacionales (Alta cuantía/Bajo riesgo) y Rutinarios (Baja cuantía/Bajo riesgo)."
+            },
+            {
+                id: 32,
+                category: "El Requerimiento",
+                question: "¿A quién le corresponde la formulación del requerimiento?",
+                options: [
+                    "A la Dirección General de Abastecimiento (DGA)",
+                    "Al Órgano Encargado de las Contrataciones (DEC)",
+                    "Al Área Usuaria",
+                    "Al Tribunal de Contrataciones",
+                    "Al Comité de Selección exclusivamente"
+                ],
+                correct: 2,
+                explanation: "La formulación del requerimiento (términos de referencia o especificaciones técnicas) es responsabilidad exclusiva e indelegable del Área Usuaria que genera la necesidad."
+            },
+            {
+                id: 33,
+                category: "El Requerimiento",
+                question: "Los tres componentes fundamentales de la estructura de un requerimiento son:",
+                options: [
+                    "Términos de referencia, Bases y Certificación",
+                    "Características técnicas, Condiciones de contratación y Requisitos de calificación",
+                    "Marca, Modelo y Precio de mercado",
+                    "PAC, PIA y CMN",
+                    "Cuantía, Garantía y Penalidad por mora"
+                ],
+                correct: 1,
+                explanation: "El requerimiento estructuralmente se compone de: 1) Características o especificaciones técnicas, 2) Condiciones de ejecución del contrato, y 3) Requisitos de calificación del postor."
+            },
+            {
+                id: 34,
+                category: "El Requerimiento",
+                question: "Si el Órgano Encargado de las Contrataciones (DEC) propone mejoras al requerimiento y el Área Usuaria manifiesta su discrepancia justificada de que afectará la necesidad, se denomina:",
+                options: [
+                    "No objeción",
+                    "Objeción",
+                    "Homologación",
+                    "Inadmisibilidad",
+                    "Observación de bases"
+                ],
+                correct: 1,
+                explanation: "La 'Objeción' es la figura donde el área usuaria se opone fundadamente a los cambios sugeridos por el DEC por considerar que alteran el objeto o calidad de la prestación."
+            },
+            {
+                id: 35,
+                category: "Modalidades de Pago",
+                question: "Modalidad de pago aplicable cuando las cantidades, magnitudes y calidades están totalmente definidas en el requerimiento:",
+                options: [
+                    "Precios unitarios",
+                    "Suma alzada",
+                    "Tarifas",
+                    "Esquema mixto",
+                    "Por consumo"
+                ],
+                correct: 1,
+                explanation: "Suma Alzada es el sistema idóneo cuando las magnitudes, cantidades y calidades están completamente prefijadas y no sufrirán variaciones durante la ejecución."
+            },
+            {
+                id: 36,
+                category: "Modalidades de Pago",
+                question: "Modalidad de pago aplicable cuando NO se conocen con exactitud o precisión las cantidades o magnitudes requeridas:",
+                options: [
+                    "Suma alzada",
+                    "Precios unitarios",
+                    "Honorario fijo y comisión de éxito",
+                    "Porcentaje",
+                    "Llave en mano"
+                ],
+                correct: 1,
+                explanation: "Precios Unitarios se aplica en prestaciones donde las cantidades y magnitudes no pueden determinarse con exactitud previamente (ej. mantenimientos correctivos o excavaciones)."
+            },
+            {
+                id: 37,
+                category: "Modalidades de Entrega",
+                question: "Sistema de entrega obligatorio en compras de equipamiento médico para garantizar su ciclo de vida y operatividad:",
+                options: [
+                    "Suministro con comodato",
+                    "Llave en mano o llave en mano con mantenimiento",
+                    "Venta directa",
+                    "Consignación patrimonial",
+                    "Construcción tradicional"
+                ],
+                correct: 1,
+                explanation: "La modalidad Llave en Mano contempla la provisión, instalación, puesta en funcionamiento y mantenimiento integral garantizando operatividad directa para la entidad."
+            },
+            {
+                id: 38,
+                category: "Calificación",
+                question: "Requisito de calificación que evalúa las habilitaciones exigidas por norma legal para ejecutar la actividad económica:",
+                options: [
+                    "Capacidad legal",
+                    "Capacidad técnica",
+                    "Capacidad económica",
+                    "Experiencia del postor",
+                    "Solvencia financiera"
+                ],
+                correct: 0,
+                explanation: "La Capacidad Legal verifica el cumplimiento de licencias, autorizaciones, colegiaturas o registros obligatorios exigidos por leyes especiales para ejercer la actividad."
+            },
+            {
+                id: 39,
+                category: "Experiencia del Postor",
+                question: "En bienes, servicios y consultorías generales, ¿cuál es la cantidad máxima de contrataciones con la que un postor puede acreditar su experiencia en la especialidad?",
+                options: [
+                    "5 contrataciones",
+                    "10 contrataciones",
+                    "Máximo 20 contrataciones",
+                    "Ilimitado",
+                    "50 comprobantes de pago"
+                ],
+                correct: 2,
+                explanation: "La normativa impone un tope de máximo 20 contrataciones (o facturas/comprobantes) para acreditar el monto acumulado de experiencia exigido en las bases."
+            },
+            {
+                id: 40,
+                category: "Estudio de Mercado",
+                question: "¿Cuáles son los dos tipos principales de interacción con el mercado previstos en las actuaciones preparatorias?",
+                options: [
+                    "Licitación y Concurso",
+                    "Indagación y Consulta al mercado",
+                    "Cotización e Inspección",
+                    "Encuesta y Subasta",
+                    "Entrevista y Auditoría"
+                ],
+                correct: 1,
+                explanation: "El marco norma dos formas claras: la Indagación de Mercado (estimación de valor y pluralidad) y las Consultas al Mercado (solicitud de opiniones sobre la viabilidad del requerimiento)."
+            },
+            {
+                id: 41,
+                category: "Expediente de Contratación",
+                question: "Documento probatorio que contiene la información que respalda todas las actuaciones del proceso desde la formulación del requerimiento hasta el cumplimiento total del contrato:",
+                options: [
+                    "Expediente de Contratación",
+                    "Cuadro Multianual de Necesidades",
+                    "Formulario de Buena Pro",
+                    "Registro Nacional de Proveedores",
+                    "Plan Anual de Contrataciones"
+                ],
+                correct: 0,
+                explanation: "El Expediente de Contratación es el conjunto de actuados ordenados que contiene toda la trazabilidad técnica, económica y legal del procedimiento."
+            },
+            {
+                id: 42,
+                category: "Umbrales de Compra",
+                question: "Para el año 2026, ¿cuál es el monto a partir del cual se convoca una Licitación Pública para la adquisición de bienes?",
+                options: [
+                    "Mayor a 8 UIT",
+                    "Igual o mayor a S/ 485,000",
+                    "Igual o mayor a S/ 5,000,000",
+                    "A partir de S/ 79,000,000",
+                    "Superior a S/ 100,000"
+                ],
+                correct: 1,
+                explanation: "El umbral económico legal establecido para convocar Licitación Pública de Bienes se fija a partir de S/ 485,000 en adelante."
+            },
+            {
+                id: 43,
+                category: "Procedimientos de Selección",
+                question: "Modalidad de procedimiento de selección que se aplica a bienes o servicios comunes que cuentan con una Ficha Técnica aprobada:",
+                options: [
+                    "Comparación de precios",
+                    "Subasta Inversa Electrónica",
+                    "Diálogo competitivo",
+                    "Selección de consultores individuales",
+                    "Adjudicación directa"
+                ],
+                correct: 1,
+                explanation: "La Subasta Inversa Electrónica (SIE) es el procedimiento obligatorio para contratar bienes y servicios comunes estandarizados con Ficha Técnica aprobada en el Catálogo."
+            },
+            {
+                id: 44,
+                category: "Consultas y Observaciones",
+                question: "¿Cuál es el plazo para formular Consultas u Observaciones ante un procedimiento de selección competitivo ordinario?",
+                options: [
+                    "Mínimo 3 días hábiles",
+                    "Mínimo 7 días hábiles",
+                    "10 días calendario",
+                    "15 días hábiles",
+                    "2 días hábiles"
+                ],
+                correct: 1,
+                explanation: "Los participantes disponen de un plazo mínimo de 7 días hábiles contados desde la convocatoria para elevar sus consultas u observaciones a las bases."
+            },
+            {
+                id: 45,
+                category: "Bases del Proceso",
+                question: "Documento que consolidó las respuestas a las consultas y las modificaciones al requerimiento, constituyendo las REGLAS DEFINITIVAS del proceso:",
+                options: [
+                    "Expediente técnico",
+                    "Bases Integradas",
+                    "Solicitud de Cotización",
+                    "Requerimiento primario",
+                    "Acta de Otorgamiento"
+                ],
+                correct: 1,
+                explanation: "Las Bases Integradas incorporan todas las aclaraciones y modificaciones resultantes de la absolución de consultas, convirtiéndose en las reglas firmes de la competencia."
+            },
+            {
+                id: 46,
+                category: "Impugnaciones",
+                question: "¿Ante qué órgano y hasta qué cuantía de la contratación conoce la Autoridad de la Gestión Administrativa de la entidad un Recurso de Apelación?",
+                options: [
+                    "Ante la DGA, hasta 100 UIT",
+                    "Ante la Entidad contratante, cuando la cuantía es igual o menor a 50 UIT",
+                    "Ante el OECE, sin importar el monto",
+                    "Ante el Tribunal de Contrataciones, mayores a 10 UIT",
+                    "Ante la Contraloría, hasta 20 UIT"
+                ],
+                correct: 1,
+                explanation: "La apelación es resuelta por el Titular o Autoridad de la Entidad cuando el valor estimado es menor o igual a 50 UIT. Si supera ese monto, resuelve el Tribunal del OECE."
+            },
+            {
+                id: 47,
+                category: "Modificaciones del Contrato",
+                question: "¿Cuál es el porcentaje máximo sobre el monto del contrato original que una Entidad puede ordenar por concepto de Prestaciones Adicionales en bienes y servicios?",
+                options: [
+                    "10%",
+                    "15%",
+                    "Hasta el 25%",
+                    "50%",
+                    "30%"
+                ],
+                correct: 2,
+                explanation: "La entidad puede disponer de manera unilateral adicionales de bienes y servicios hasta un límite máximo del 25% del monto total del contrato original."
+            },
+            {
+                id: 48,
+                category: "Penalidades",
+                question: "La suma total aplicada por penalidad por mora y otras penalidades al contratista no debe exceder de:",
+                options: [
+                    "5% del monto del contrato",
+                    "10% del contrato vigente",
+                    "20% del valor adjudicado",
+                    "50% de la garantía depositada",
+                    "15% de la orden de compra"
+                ],
+                correct: 1,
+                explanation: "El tope máximo tope acumulado por Penalidad por Mora es del 10% y para Otras Penalidades es independientemente de hasta otro 10% del monto contractual vigente."
+            },
+            {
+                id: 49,
+                category: "Fórmula de Penalidad",
+                question: "¿Cuál es la fórmula para el cálculo de la penalidad diaria por mora?",
+                options: [
+                    "Penalidad diaria = (0.10 × monto) / (F × plazo)",
+                    "Penalidad diaria = 0.05 × monto × días de atraso",
+                    "Penalidad diaria = monto del contrato / días calendario",
+                    "Penalidad diaria = (0.15 × plazo) / (F × monto)",
+                    "Penalidad diaria = Monto de la garantía × 0.10"
+                ],
+                correct: 0,
+                explanation: "La fórmula normativa es: Penalidad Diaria = (0.10 × Monto) / (F × Plazo en días), donde 'F' es un factor constante determinado según el plazo de ejecución."
+            },
+            {
+                id: 50,
+                category: "Conformidad y Pago",
+                question: "Una vez otorgada la conformidad de los bienes o servicios, ¿cuál es el plazo máximo que tiene la Entidad para efectuar el pago correspondiente?",
+                options: [
+                    "Máximo 5 días hábiles",
+                    "Máximo 10 días hábiles (prorrogable por 5 días hábiles con justificación)",
+                    "30 días calendario",
+                    "15 días hábiles exactos",
+                    "60 días calendario"
+                ],
+                correct: 1,
+                explanation: "Emitida la conformidad, el pago debe concretarse dentro de los 10 días hábiles subsiguientes (excepcionalmente ampliable 5 días hábiles más por razones operativas)."
+            }
+        ];
+
+        // Estado Global de la Aplicación
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+
+        // Inicialización
+        window.addEventListener('DOMContentLoaded', () => {
+            renderQuestionGrid();
+            loadQuestion(0);
+        });
+
+        // Renderizar Cuadrícula Lateral de Preguntas
+        function renderQuestionGrid() {
+            const grid = document.getElementById('question-grid');
+            grid.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `grid-btn-${idx}`;
+                btn.onclick = () => jumpToQuestion(idx);
+                btn.className = `w-full aspect-square rounded-lg font-semibold text-xs flex items-center justify-center border transition-all duration-150 ${getGridBtnStyle(idx)}`;
+                btn.innerText = idx + 1;
+                grid.appendChild(btn);
+            });
+        }
+
+        // Estilos para la cuadrícula
+        function getGridBtnStyle(index) {
+            if (index === currentQuestionIndex) {
+                return "ring-2 ring-blue-600 ring-offset-1 font-bold border-mef-800 text-mef-900 bg-blue-50";
+            }
+            if (userAnswers[index] === null) {
+                return "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200";
+            }
+            if (userAnswers[index] === questions[index].correct) {
+                return "bg-emerald-500 text-white border-emerald-600 shadow-sm";
+            }
+            return "bg-rose-500 text-white border-rose-600 shadow-sm";
+        }
+
+        // Cargar Pregunta Actual
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = questions[index];
+
+            // Badges y Textos
+            document.getElementById('question-badge').innerText = `Pregunta N.º ${q.id}`;
+            document.getElementById('topic-badge').innerText = q.category;
+            document.getElementById('question-text').innerText = q.question;
+            document.getElementById('stat-current').innerText = `${q.id} de 50`;
+            document.getElementById('footer-counter').innerText = `${q.id} de 50`;
+
+            // Contenedor de Opciones
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+            const answered = userAnswers[index] !== null;
+            const selectedOption = userAnswers[index];
+
+            q.options.forEach((optText, optIdx) => {
+                const btn = document.createElement('button');
+                btn.disabled = answered;
+                btn.onclick = () => selectAnswer(optIdx);
+
+                let btnStyle = "w-full text-left p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 transition duration-150 flex items-start gap-3 group";
+
+                if (answered) {
+                    if (optIdx === q.correct) {
+                        // Es la correcta
+                        btnStyle = "w-full text-left p-3.5 sm:p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/80 text-emerald-900 font-medium flex items-start gap-3 shadow-sm";
+                    } else if (optIdx === selectedOption) {
+                        // Es la incorrecta elegida por el usuario
+                        btnStyle = "w-full text-left p-3.5 sm:p-4 rounded-xl border-2 border-rose-500 bg-rose-50/80 text-rose-900 font-medium flex items-start gap-3 shadow-sm";
+                    } else {
+                        // Opción neutra deshabilitada
+                        btnStyle = "w-full text-left p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-slate-50/60 text-slate-400 flex items-start gap-3 opacity-60 cursor-not-allowed";
+                    }
+                }
+
+                btn.className = btnStyle;
+
+                // Indicador de Letra (A, B, C...)
+                let letterStyle = "w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ";
+                if (answered) {
+                    if (optIdx === q.correct) letterStyle += "bg-emerald-600 text-white";
+                    else if (optIdx === selectedOption) letterStyle += "bg-rose-600 text-white";
+                    else letterStyle += "bg-slate-200 text-slate-500";
+                } else {
+                    letterStyle += "bg-slate-100 text-slate-600 group-hover:bg-mef-800 group-hover:text-white";
+                }
+
+                btn.innerHTML = `
+                    <span class="${letterStyle}">${letters[optIdx]}</span>
+                    <span class="text-xs sm:text-sm pt-0.5 leading-relaxed flex-1">${optText}</span>
+                    ${answered && optIdx === q.correct ? '<i class="fa-solid fa-circle-check text-emerald-600 text-lg ml-2 shrink-0 self-center"></i>' : ''}
+                    ${answered && optIdx === selectedOption && optIdx !== q.correct ? '<i class="fa-solid fa-circle-xmark text-rose-600 text-lg ml-2 shrink-0 self-center"></i>' : ''}
+                `;
+
+                container.appendChild(btn);
+            });
+
+            // Explicación
+            const explanationBox = document.getElementById('explanation-box');
+            if (answered) {
+                const isCorrect = selectedOption === q.correct;
+                explanationBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'bg-rose-50', 'border-rose-200', 'text-rose-900');
+                
+                if (isCorrect) {
+                    explanationBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-900');
+                    document.getElementById('explanation-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
+                    document.getElementById('explanation-title').innerText = '¡Respuesta Correcta!';
+                } else {
+                    explanationBox.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-900');
+                    document.getElementById('explanation-icon').innerHTML = '<i class="fa-solid fa-circle-exclamation text-rose-600"></i>';
+                    document.getElementById('explanation-title').innerText = 'Respuesta Incorrecta';
+                }
+
+                document.getElementById('explanation-text').innerHTML = `<strong>Fundamento Técnico:</strong> ${q.explanation}`;
+            } else {
+                explanationBox.classList.add('hidden');
+            }
+
+            // Actualizar botones de navegación
+            document.getElementById('btn-prev').disabled = index === 0;
+            const btnNext = document.getElementById('btn-next');
+            if (index === questions.length - 1) {
+                btnNext.innerHTML = 'Ver Resultados <i class="fa-solid fa-flag-checkered ml-1"></i>';
+            } else {
+                btnNext.innerHTML = 'Siguiente <i class="fa-solid fa-arrow-right ml-1"></i>';
+            }
+
+            updateQuestionGrid();
+            updateScores();
+        }
+
+        // Selección de Respuesta
+        function selectAnswer(optionIndex) {
+            if (userAnswers[currentQuestionIndex] !== null) return; // Prevenir doble clic
+
+            userAnswers[currentQuestionIndex] = optionIndex;
+            loadQuestion(currentQuestionIndex);
+        }
+
+        // Salto Directo desde la Grilla
+        function jumpToQuestion(index) {
+            loadQuestion(index);
+        }
+
+        // Navegación
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        // Actualización de la Grilla
+        function updateQuestionGrid() {
+            questions.forEach((_, idx) => {
+                const btn = document.getElementById(`grid-btn-${idx}`);
+                if (btn) {
+                    btn.className = `w-full aspect-square rounded-lg font-semibold text-xs flex items-center justify-center border transition-all duration-150 ${getGridBtnStyle(idx)}`;
+                }
+            });
+        }
+
+        // Cálculo de Puntajes y Métricas
+        function updateScores() {
+            let correct = 0;
+            let wrong = 0;
+            let answeredCount = 0;
+
+            userAnswers.forEach((ans, idx) => {
+                if (ans !== null) {
+                    answeredCount++;
+                    if (ans === questions[idx].correct) correct++;
+                    else wrong++;
+                }
+            });
+
+            document.getElementById('score-correct-head').innerText = correct;
+            document.getElementById('score-wrong-head').innerText = wrong;
+            document.getElementById('stat-answered').innerText = `${answeredCount} / 50`;
+
+            const accuracy = answeredCount > 0 ? Math.round((correct / answeredCount) * 100) : 0;
+            document.getElementById('stat-accuracy').innerText = `${accuracy}%`;
+
+            // Barra de progreso global
+            const progressPercent = Math.max(2, Math.round((answeredCount / questions.length) * 100));
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+        }
+
+        // Finalizar y Modal
+        function finishQuiz() {
+            let correct = 0;
+            let answeredCount = 0;
+
+            userAnswers.forEach((ans, idx) => {
+                if (ans !== null) {
+                    answeredCount++;
+                    if (ans === questions[idx].correct) correct++;
+                }
+            });
+
+            const accuracy = answeredCount > 0 ? Math.round((correct / answeredCount) * 100) : 0;
+
+            document.getElementById('modal-score').innerText = `${correct} / 50`;
+            document.getElementById('modal-accuracy').innerText = `${accuracy}%`;
+
+            const statusElem = document.getElementById('modal-status');
+            const feedbackElem = document.getElementById('modal-feedback');
+
+            if (accuracy >= 80) {
+                statusElem.innerText = 'SOBRESALIENTE';
+                statusElem.className = 'text-xs font-bold px-2 py-1 rounded bg-emerald-100 text-emerald-800';
+                feedbackElem.innerText = '¡Excelente nivel de dominio de la normativa del Sistema Nacional de Abastecimiento! Estás completamente preparado para aplicar estos conceptos técnicamente.';
+            } else if (accuracy >= 60) {
+                statusElem.innerText = 'APROBADO';
+                statusElem.className = 'text-xs font-bold px-2 py-1 rounded bg-blue-100 text-blue-800';
+                feedbackElem.innerText = 'Buen trabajo. Posees un conocimiento sólido de la estructura del SNA, D.L. 1439 y PMBSO. Te recomendamos repasar los temas donde tuviste fallas.';
+            } else {
+                statusElem.innerText = 'EN REVISIÓN';
+                statusElem.className = 'text-xs font-bold px-2 py-1 rounded bg-amber-100 text-amber-800';
+                feedbackElem.innerText = 'Se sugiere realizar un nuevo repaso de los principios del SNA, fases del CMN y reglas del PAC para afianzar el marco regulatorio.';
+            }
+
+            document.getElementById('results-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('results-modal').classList.add('hidden');
+        }
+
+        function restartQuiz() {
+            userAnswers = new Array(questions.length).fill(null);
+            closeModal();
+            loadQuestion(0);
+        }
+    </script>
+</body>
+</html>
