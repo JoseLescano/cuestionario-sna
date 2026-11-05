@@ -15,7 +15,6 @@
 
         .moodle-question-box {
             background-color: #e0f2fe;
-            /* Azul pastel suave como la imagen */
             border: 1px solid #bae6fd;
         }
 
@@ -32,11 +31,10 @@
 
 <body class="text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Header Superior con Logo de Ingeniería de Sistemas -->
+    <!-- Header Superior -->
     <header class="bg-slate-900 text-white border-b border-slate-700 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <!-- Logo de Ingeniería de Sistemas (Nodos / Red / Circuito) -->
                 <div
                     class="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl shadow-inner">
                     <i class="fa-solid fa-laptop-code"></i>
@@ -60,7 +58,7 @@
 
     <main class="max-w-7xl mx-auto px-4 py-6 w-full flex-1">
 
-        <!-- Breadcrumb (Miga de pan estilo aula virtual) -->
+        <!-- Breadcrumb -->
         <nav class="text-xs text-slate-500 font-semibold mb-3 flex items-center gap-1.5 flex-wrap">
             <span class="text-emerald-700 hover:underline cursor-pointer">VIRTUAL-SNA</span>
             <span>/</span>
@@ -68,21 +66,21 @@
             <span>/</span>
             <span class="text-slate-600">SISTEMA NACIONAL DE ABASTECIMIENTO</span>
             <span>/</span>
-            <span class="text-rose-600 font-bold">40 PREGUNTAS TIPO EXAMEN</span>
+            <span class="text-slate-600 font-bold">40 PREGUNTAS TIPO EXAMEN</span>
         </nav>
 
-        <!-- Título Principal con ícono de evaluación -->
+        <!-- Título Principal -->
         <div class="flex items-center gap-3 mb-6">
-            <div class="text-rose-500 text-3xl">
+            <div class="text-blue-600 text-3xl">
                 <i class="fa-regular fa-rectangle-list"></i>
             </div>
             <h2 class="text-2xl font-black text-slate-900 tracking-tight">40 PREGUNTAS EXTRAS TIPO EXAMEN</h2>
         </div>
 
-        <!-- Contenido Principal: Grid de 2 Columnas (Estilo Moodle) -->
+        <!-- Contenido Principal -->
         <div id="quiz-screen" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-            <!-- Columna Izquierda: Tarjeta de la Pregunta + Estado (cols 1 a 8) -->
+            <!-- Columna Izquierda -->
             <div class="lg:col-span-8 space-y-4">
 
                 <button onclick="navigate(-1)" id="back-btn"
@@ -92,7 +90,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
 
-                    <!-- Panel de Estado Izquierdo (Moodle) -->
+                    <!-- Panel Izquierdo -->
                     <div
                         class="md:col-span-3 bg-slate-100 p-3 rounded-lg border border-slate-200 text-xs space-y-2 h-fit">
                         <div>
@@ -116,15 +114,13 @@
                         </button>
                     </div>
 
-                    <!-- Cuadro Celeste de Pregunta y Opciones -->
+                    <!-- Cuadro de Pregunta -->
                     <div class="md:col-span-9 moodle-question-box p-5 rounded-xl shadow-sm text-sm space-y-4">
 
-                        <!-- Texto de la pregunta -->
                         <p id="q-text" class="font-bold text-slate-900 leading-relaxed">
                             Cargando pregunta...
                         </p>
 
-                        <!-- Caja desplegable de Pista/Ayuda -->
                         <div id="hint-box"
                             class="hidden p-3 bg-amber-50 border-l-4 border-amber-400 text-amber-900 text-xs rounded-r shadow-inner">
                             <span class="font-bold block mb-0.5"><i
@@ -132,12 +128,9 @@
                             <p id="hint-text"></p>
                         </div>
 
-                        <!-- Opciones con Radio Buttons estilo Moodle -->
                         <div id="options-container" class="space-y-2.5 pt-2">
-                            <!-- Se insertan dinámicamente -->
                         </div>
 
-                        <!-- Botón Comprobar -->
                         <div class="pt-3">
                             <button id="check-btn" onclick="checkAnswer()"
                                 class="px-5 py-2 moodle-btn-gray text-xs font-bold rounded shadow hover:bg-slate-400 transition-colors">
@@ -145,7 +138,6 @@
                             </button>
                         </div>
 
-                        <!-- Caja de Alimentación Post-Comprobar -->
                         <div id="feedback-box" class="hidden p-3 rounded-lg border text-xs leading-relaxed mt-3">
                             <div id="feedback-title" class="font-bold mb-1"></div>
                             <p id="feedback-text"></p>
@@ -157,14 +149,12 @@
 
             </div>
 
-            <!-- Columna Derecha: Navegación por el Cuestionario (cols 9 a 12) -->
+            <!-- Columna Derecha -->
             <div class="lg:col-span-4">
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3 sticky top-20">
                     <h3 class="text-sm font-bold text-slate-800 border-b pb-2">Navegación por el cuestionario</h3>
 
-                    <!-- Grilla de números 1 al 40 -->
                     <div id="nav-grid" class="grid grid-cols-7 sm:grid-cols-8 lg:grid-cols-7 gap-1.5">
-                        <!-- Botones 1 al 40 -->
                     </div>
 
                     <div class="pt-2 border-t text-right">
@@ -177,7 +167,7 @@
 
         </div>
 
-        <!-- Pantalla de Resumen Final -->
+        <!-- Pantalla Final -->
         <div id="result-screen"
             class="hidden max-w-2xl mx-auto bg-white p-8 rounded-2xl border border-slate-200 shadow-lg text-center space-y-6 my-8">
             <div
@@ -221,7 +211,6 @@
     </main>
 
     <script>
-        // 40 Preguntas con opciones equilibradas en longitud y alternativas variadas (A, B, C, D, E)
         const quizData = [
             {
                 id: 1,
@@ -233,7 +222,7 @@
                     "Centralizar la totalidad de los almacenes físicos del Estado en un único depósito administrado por el MEF.",
                     "Maximizar el ahorro fiscal mediante la selección obligatoria del precio más bajo ofrecido en el mercado."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "El SNA articula los procesos para que las entidades obtengan bienes, servicios y obras con provisión oportuna y eficiente, garantizando el cumplimiento de metas."
             },
             {
@@ -246,7 +235,7 @@
                     "Programación Multianual de BSyO, Gestión de Adquisiciones y Administración de Bienes.",
                     "Certificación Presupuestal, Compromiso Anual del Gasto y Devengado del Proveedor."
                 ],
-                correct: 2, // C
+                correct: 2,
                 exp: "La Cadena de Abastecimiento Público está conformada por: 1) PMBSO, 2) Gestión de Adquisiciones y 3) Administración de Bienes."
             },
             {
@@ -259,7 +248,7 @@
                     "Resolver en última instancia administrativa los recursos de apelación interpuestos en licitaciones públicas.",
                     "Auditar anualmente los estados financieros y cuentas bancarias de las empresas contratistas del Estado."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "La DGA del MEF es la autoridad técnico-normativa a nivel nacional encargada de emitir directivas y reglamentar la Cadena de Abastecimiento."
             },
             {
@@ -272,7 +261,7 @@
                     "Porque la gestión abarca todo el ciclo de vida: almacenamiento, distribución, mantenimiento, custodia y disposición final.",
                     "Porque las órdenes de compra emitidas bajo el SNA poseen vigencia indeterminada según la Ley N.º 32069."
                 ],
-                correct: 2, // C
+                correct: 2,
                 exp: "La gestión no termina con la compra; abarca la Administración de Bienes durante todo su ciclo de vida útil hasta su baja o disposición."
             },
             {
@@ -285,7 +274,7 @@
                     "Obligar a las entidades públicas a contratar de forma exclusiva con proveedores domiciliados en su localidad.",
                     "Impedir la suscripción de adendas o modificaciones contractuales durante la fase de ejecución de la obra."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "La trazabilidad permite reconstruir las actuaciones y conocer la situación de bienes, servicios u obras en cualquier etapa."
             },
             {
@@ -298,7 +287,7 @@
                     "Renovar obligatoriamente la totalidad del parque automotor de la entidad al inicio de cada ejercicio fiscal.",
                     "Subcontratar la administración total de los almacenes con operadores logísticos del sector privado nacional."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "El enfoque de ciclo de vida planifica desde la necesidad e incorporación hasta el mantenimiento, conservación y destino final."
             },
             {
@@ -311,7 +300,7 @@
                     "El proceso de identificar y consolidar necesidades para un horizonte multianual mínimo de tres años consecutivos.",
                     "La liquidación técnica y financiera de obras públicas ejecutadas mediante la modalidad de administración directa."
                 ],
-                correct: 2, // C
+                correct: 2,
                 exp: "La PMBSO es el proceso mediante el cual se identifican, priorizan y consolidan necesidades por un horizonte mínimo de 3 años."
             },
             {
@@ -324,7 +313,7 @@
                     "Registrar la lista de contratistas sancionados con penalidad por mora durante el ejercicio presupuestal anterior.",
                     "Autorizar el desembolso directo de viáticos e insumos menores mediante la caja chica de la administración."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "El CMN es el producto final de la PMBSO que organiza y prioriza todas las necesidades cuantificadas de la entidad."
             },
             {
@@ -337,7 +326,7 @@
                     "Determinar de forma automática la empresa ganadora de la Buena Pro en selecciones competitivas.",
                     "Eliminar la fase de priorización presupuestal en la formulación del Cuadro Multianual de Necesidades."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "El pronóstico de demanda utiliza información técnica e histórica para anticipar necesidades reales y evitar compras imprevistas."
             },
             {
@@ -350,7 +339,7 @@
                     "Identificación; Clasificación y Priorización; y Consolidación y Aprobación del Cuadro de Necesidades.",
                     "Certificación de Crédito Presupuestario, Compromiso Anual del Gasto y Liquidación de Pagos."
                 ],
-                correct: 2, // C
+                correct: 2,
                 exp: "Las tres fases normadas de la PMBSO son: 1. Identificación, 2. Clasificación y Priorización, y 3. Consolidación y Aprobación."
             },
             {
@@ -363,7 +352,7 @@
                     "Calcular el monto máximo de penalidades aplicables a los proveedores por incumplimiento de plazos.",
                     "Aprobar los Reglamentos de Organización y Funciones de la Oficina General de Administración."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "En la fase de Identificación, las áreas usuarias cuantifican y sustentan sus necesidades en función de sus actividades y metas."
             },
             {
@@ -376,7 +365,7 @@
                     "Para evitar la implementación de sistemas informáticos centralizados como el módulo SIGA-MEF.",
                     "Debido a que la responsabilidad penal por desabastecimiento recae sobre todos los empleados institucionales."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "La PMBSO requiere sinergia entre el área usuaria (necesidad), abastecimiento (organización) y presupuesto (marco financiero)."
             },
             {
@@ -389,7 +378,7 @@
                     "El límite máximo de recursos presupuestarios asignado por el MEF a un pliego, sirviendo de techo para programar.",
                     "El fondo de reserva de contingencia destinado exclusivamente al pago de sentencias judiciales firmes."
                 ],
-                correct: 2, // C
+                correct: 2,
                 exp: "La APM establece el límite financiero máximo que debe observar la entidad para ajustar y equilibrar su CMN."
             },
             {
@@ -402,7 +391,7 @@
                     "Provoca la cancelación inmediata de la personería jurídica e institucional del pliego correspondiente.",
                     "Exime a la entidad de rendir cuentas anuales ante la Contraloría General de la República."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "Programar mal ocasiona desabastecimiento, compras apuradas a sobreprecio o stocks inútiles en almacén."
             },
             {
@@ -415,11 +404,9 @@
                     "Sustituye el requisito legal de contar con Bases Integradas en los procedimientos de selección.",
                     "Modifica los plazos para interponer recursos de apelación ante el Tribunal de Contrataciones."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "La información del CMN sirve de insumo directo para estructurar el requerimiento, la estrategia y las actuaciones preparatorias."
             },
-
-            // SESIÓN 3: ACTUACIONES PREPARATORIAS (16 al 23)
             {
                 id: 16,
                 question: "016. ACTUACIONES PREPARATORIAS — ¿Cuál es el propósito central de la etapa preparatoria en la contratación pública?",
@@ -430,7 +417,7 @@
                     "Realizar la auditoría a posteriori de los suministros consumidos durante el ejercicio fiscal anterior.",
                     "Suscribir las actas definitivas de recepción y conformidad de obras de infraestructura pública."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Las actuaciones preparatorias organizan decisiones clave (requerimiento, mercado, expediente y bases) antes de convocar."
             },
             {
@@ -443,7 +430,7 @@
                     "Separar los comprobantes de pago emitidos por los proveedores según la fecha de su vencimiento.",
                     "Asignar correlativamente códigos de inventario a los equipos de cómputo adquiridos por la entidad."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "La segmentación agrupa las compras por categorías y niveles de riesgo para optimizar la estrategia de adquisición."
             },
             {
@@ -456,7 +443,7 @@
                     "Para evitar que empresas extranjeras participen en los procedimientos de selección convocados.",
                     "Debido a que la normativa prohíbe realizar precisiones o aclaraciones durante la consulta a bases."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Un requerimiento claro y bien definido garantiza libre concurrencia y asegura la obtención del resultado deseado."
             },
             {
@@ -469,7 +456,7 @@
                     "La solicitud de ampliación presupuestal remitida por el titular del pliego ante la Comisión de Presupuesto.",
                     "El recurso de impugnación presentado por los participantes ante el Tribunal del OECE."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "La estrategia define la modalidad, envasado de lotes y mitigación de riesgos para maximizar el valor del dinero público."
             },
             {
@@ -482,7 +469,7 @@
                     "Otorgar la Buena Pro de manera anticipada antes de publicar las bases en el sistema SEACE.",
                     "Inspeccionar las instalaciones administrativas de todos los postores inscritos en el RNP."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "Interaccionar con el mercado permite verificar la viabilidad del requerimiento y optimizar las condiciones contractuales."
             },
             {
@@ -495,7 +482,7 @@
                     "La necesidad la define el proveedor y el requerimiento lo aprueba la Contraloría General.",
                     "El requerimiento se elabora en la ejecución contractual y la necesidad al momento del pago."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "La necesidad identifica el problema o meta pública; el requerimiento traduce esa necesidad en condiciones técnicas."
             },
             {
@@ -508,7 +495,7 @@
                     "Servir como comprobante de pago frente a la Superintendencia Nacional de Aduanas y Administración Tributaria.",
                     "Inscribir la titularidad de los bienes inmuebles estatales en los registros públicos de la SUNARP."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "El expediente reúne los documentos que sustentan las actuaciones desde el requerimiento hasta la culminación del contrato."
             },
             {
@@ -521,11 +508,9 @@
                     "Asegurar que la oferta económica de mayor valor monetario resulte ganadora en la selección.",
                     "Sustituir la necesidad de publicar las bases integradas en el portal del sistema SEACE."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Los evaluadores asumen la responsabilidad técnica de seleccionar la oferta conforme a las bases e igualdad de trato."
             },
-
-            // SESIÓN 4: FASE DE SELECCIÓN (24 al 29)
             {
                 id: 24,
                 question: "024. PROCEDIMIENTO DE SELECCIÓN — ¿Qué es un procedimiento de selección y cuál es su fin primordial?",
@@ -536,7 +521,7 @@
                     "Una auditoría de estados financieros realizada por una firma externa e independiente.",
                     "Un acto de negociación privada entre la entidad pública y empresas internacionales sin regulación."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Su objetivo es seleccionar la mejor propuesta del mercado para satisfacer la necesidad pública y firmar el contrato."
             },
             {
@@ -549,7 +534,7 @@
                     "El no competitivo permite comprar sin límites de precio ni fiscalización a posteriori del órgano de control.",
                     "El competitivo aplica solo para la construcción de obras e infraestructura y el no competitivo para consultorías."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Los procesos competitivos comparan ofertas en igualdad de trato; los no competitivos proceden solo por causal legal sustentada."
             },
             {
@@ -562,7 +547,7 @@
                     "Alta Patrimonial, Inventario Físico de Almacén, Mantenimiento y Disposición Final del Bien.",
                     "Solicitud de Cotización, Cuadro Comparativo, Conformidad Técnica y Cancelación de Factura."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "Comprende: Convocatoria, consultas/observaciones, integración de bases, evaluación de ofertas y Buena Pro."
             },
             {
@@ -575,7 +560,7 @@
                     "Inhabilitar de forma automática a los postores que hayan formulado consultas al pliego.",
                     "Aumentar unilateralmente el presupuesto institucional aprobado para la contratación."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Las bases integradas constituyen las reglas de juego definitivas e inalterables del proceso de selección."
             },
             {
@@ -588,7 +573,7 @@
                     "Suspender por tiempo indefinido la totalidad de las compras públicas de la entidad.",
                     "Reemplazar al comité de selección por un árbitro único designado por el OSCE."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Permite aclarar o corregir aspectos de las bases antes de que se conviertan en reglas definitivas e integradas."
             },
             {
@@ -601,11 +586,9 @@
                     "La ubicación geográfica del domicilio fiscal de la empresa participante.",
                     "La cantidad total de folios que contenga el expediente de contratación."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "La elección del procedimiento responde al objeto, cuantía y supuestos normativos, no a la preferencia del funcionario."
             },
-
-            // SESIÓN 5: EJECUCIÓN CONTRACTUAL (30 al 35)
             {
                 id: 30,
                 question: "030. CONTRATO PÚBLICO — ¿Cómo se define el contrato público bajo el marco normativo de contrataciones?",
@@ -616,7 +599,7 @@
                     "Una promesa verbal de pago emitida por el jefe de la oficina de logística.",
                     "Un certificado bancario de depósito emitido a favor del Ministerio de Economía."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "El contrato público crea, regula, modifica o extingue una relación jurídica en el marco del derecho administrativo."
             },
             {
@@ -629,7 +612,7 @@
                     "Evitar que otras entidades puedan contratar servicios con la misma empresa.",
                     "Obtener el visto bueno formal de los organismos multilaterales de crédito."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "El registro en SEACE es una obligación de transparencia pública que permite dar seguimiento a la gestión contractual."
             },
             {
@@ -642,7 +625,7 @@
                     "El procedimiento administrativo sancionador aplicado a postores no presentados.",
                     "El remate público de bienes muebles declarados en baja patrimonial por almacén."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Es la fase en que el contratista ejecuta las prestaciones y la entidad verifica, otorga conformidad y cancela."
             },
             {
@@ -655,7 +638,7 @@
                     "Duplicar el monto contractual sin requerir sustento técnico ni disponibilidad presupuestal.",
                     "Sustituir al contratista adjudicado por otra empresa subcontratada sin autorización."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Las modificaciones responden a la finalidad pública pero no deben alterar el equilibrio contractual ni el objeto principal."
             },
             {
@@ -668,7 +651,7 @@
                     "Eximir a la Entidad de la obligación de tramitar adicionales o mayores metrados de obra.",
                     "Fijar un tipo de cambio monetario congelado para compras en moneda extranjera."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Preserva la equivalencia original de cargas e ingresos asumidos por la Entidad y el contratista."
             },
             {
@@ -681,11 +664,9 @@
                     "Sustituir la inspección física de los almacenes por una declaración jurada simple.",
                     "Determinar incrementos salariales para los especialistas de la Oficina de Abastecimiento."
                 ],
-                correct: 0, // A
+                correct: 0,
                 exp: "La verificación del cumplimiento sustenta la emisión de la conformidad técnica y autoriza el pago correspondiente."
             },
-
-            // SESIÓN 6: ADMINISTRACIÓN DE BIENES (36 al 40)
             {
                 id: 36,
                 question: "036. ADMINISTRACIÓN DE BIENES — ¿Qué comprende el componente de Administración de Bienes en el SNA?",
@@ -696,7 +677,7 @@
                     "La elaboración de términos de referencia para la contratación de consultorías individuales.",
                     "El cobro de tasas administrativas por concepto de licencias de edificación urbana."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Comprende el almacenamiento, distribución, mantenimiento, inventario, baja y disposición final de bienes muebles e inmuebles."
             },
             {
@@ -709,7 +690,7 @@
                     "El alta patrimonial la aprueba la SUNAT y la adquisición la realiza la empresa contratista.",
                     "La adquisición se aplica solo a terrenos e inmuebles y el alta a bienes intangibles."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Adquirir es la forma de obtener la propiedad (compra, donación); el alta es el ingreso formal al registro patrimonial."
             },
             {
@@ -722,7 +703,7 @@
                     "Sancionar de forma inmediata al personal encargado de los depósitos de almacenamiento.",
                     "Duplicar el valor de depreciación de los activos fijos registrados en el balance anual."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "El inventario físico constata la existencia real de los activos, su ubicación y estado, conciliando patrimonio con contabilidad."
             },
             {
@@ -735,7 +716,7 @@
                     "El faltante es un bien recibido por donación y el sobrante es un bien comprado mediante licitación.",
                     "El sobrante implica responsabilidad penal directa y el faltante se regulariza con nota de crédito."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Sobrante: físicamente presente sin registro; Faltante: registrado en libros pero físicamente no ubicado."
             },
             {
@@ -748,7 +729,7 @@
                     "La metodología para la formulación de proyectos de inversión pública en infraestructura vial.",
                     "Los salarios mínimos aplicables a los consultores contratados por los pliegos del Gobierno."
                 ],
-                correct: 1, // B
+                correct: 1,
                 exp: "Regula la gestión de almacenamiento y distribución de bienes muebles para asegurar trazabilidad, seguridad y conservación."
             }
         ];
@@ -818,7 +799,6 @@
                 container.appendChild(div);
             });
 
-            // Feedback y botón comprobar
             const checkBtn = document.getElementById('check-btn');
             const feedbackBox = document.getElementById('feedback-box');
 
@@ -843,7 +823,6 @@
                 feedbackBox.classList.add('hidden');
             }
 
-            // Deshabilitar Atrás en la primera pregunta
             document.getElementById('back-btn').disabled = currentQ === 0;
             document.getElementById('back-btn').style.opacity = currentQ === 0 ? '0.5' : '1';
 
