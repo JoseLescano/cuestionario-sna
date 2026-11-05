@@ -49,8 +49,7 @@
                         <span
                             class="text-xs font-black tracking-wider uppercase bg-red-700 text-white px-2.5 py-0.5 rounded-full shadow-sm">Escuela
                             de Intendencia del Ejército</span>
-                        <span class="text-xs text-amber-300 hidden sm:inline font-bold">| CURSO AVANZADO TCO2°
-                            T/ADM</span>
+                        <span class="text-xs text-amber-300 hidden sm:inline font-bold">| D.L. 1439 - Ley 32069</span>
                     </div>
                     <h1 class="text-base md:text-lg font-black leading-tight tracking-wide text-white">Plataforma de
                         Evaluación — SNA</h1>
@@ -76,7 +75,7 @@
             <span class="text-slate-300">/</span>
             <span class="text-slate-700">SISTEMA NACIONAL DE ABASTECIMIENTO</span>
             <span class="text-slate-300">/</span>
-            <span class="text-amber-700 font-black uppercase tracking-wider">40 Preguntas Tipo Examen</span>
+            <span class="text-amber-700 font-black uppercase tracking-wider">Balotario Oficial</span>
         </nav>
 
         <!-- Título Principal -->
@@ -86,9 +85,9 @@
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <div>
-                <h2 class="text-xl md:text-2xl font-black tracking-tight">40 PREGUNTAS EXTRAS TIPO EXAMEN (SNA)</h2>
-                <p class="text-xs text-slate-200 font-medium">Evaluación dinámica: las preguntas y alternativas se
-                    aleatorizan en cada intento.</p>
+                <h2 class="text-xl md:text-2xl font-black tracking-tight">EVALUACIÓN DEL BALOTARIO DE ESTUDIO (SNA)</h2>
+                <p class="text-xs text-slate-200 font-medium">Preguntas idénticas al balotario oficial. Aleatorización
+                    en cada intento.</p>
             </div>
         </div>
 
@@ -257,525 +256,536 @@
 
     <script>
         const rawQuizData = [
+            // SESIÓN 1
             {
-                question: "MARCO GENERAL — ¿Cuál es la finalidad principal del Sistema Nacional de Abastecimiento (SNA) y cómo se vincula con la gestión pública?",
-                hint: "El D.L. 1439 establece que el SNA busca asegurar la provisión oportuna de bienes, servicios y obras para cumplir metas institucionales.",
+                question: "¿Cuál es la finalidad del Sistema Nacional de Abastecimiento y cómo se vincula con la prestación de servicios públicos?",
+                hint: "Articula procesos para que las entidades obtengan recursos y logren provisión oportuna en favor de la ciudadanía.",
                 options: [
                     "Garantizar la fiscalización y sanción administrativa directa de los funcionarios logísticos de la entidad.",
-                    "Articular los procesos para proveer de forma oportuna y eficiente bienes, servicios y obras en favor de la ciudadanía.",
+                    "Articular los procesos para proveer de forma oportuna y eficiente bienes, servicios y obras para cumplir metas institucionales y atender a la ciudadanía.",
                     "Centralizar la totalidad de los almacenes físicos del Estado en un único depósito administrado por el MEF.",
                     "Maximizar el ahorro fiscal mediante la selección obligatoria del precio más bajo ofrecido en el mercado.",
                     "Limitar el uso de recursos presupuestales únicamente a compras directas de menor cuantía."
                 ],
                 correct: 1,
-                exp: "El SNA articula los procesos para que las entidades obtengan bienes, servicios y obras con provisión oportuna y eficiente, garantizando el cumplimiento de metas institucionales."
+                exp: "El SNA articula los procesos necesarios para que las entidades obtengan y administren bienes, servicios y obras con provisión oportuna y eficiente."
             },
             {
-                question: "CADENA DE ABASTECIMIENTO — ¿Cuáles son los tres componentes de la Cadena de Abastecimiento Público según el D.L. N.° 1439?",
-                hint: "Comprende la fase de planificación previa, la fase de compra/selección y la fase de gestión física/patrimonial de los recursos.",
+                question: "¿Cuáles son los tres componentes de la Cadena de Abastecimiento Público y qué función cumple cada uno?",
+                hint: "Comprende PMBSO (programa), Gestión de Adquisiciones (obtiene) y Administración de Bienes (gestiona el ciclo de vida).",
                 options: [
                     "Catalogación de Bienes, Subasta Inversa Electrónica y Baja Patrimonial de Activos.",
                     "Planeamiento Estratégico, Presupuesto Institucional y Control Contralor del Gasto.",
-                    "Programación Multianual de BSyO, Gestión de Adquisiciones y Administración de Bienes.",
+                    "Programación Multianual de Bienes, Servicios y Obras (identifica/programa); Gestión de Adquisiciones (desarrolla procedimientos); y Administración de Bienes (administra durante su ciclo de vida).",
                     "Certificación Presupuestal, Compromiso Anual del Gasto y Devengado del Proveedor.",
                     "Auditoría Logística, Gestión de Proveedores y Evaluación de Inversión Pública."
                 ],
                 correct: 2,
-                exp: "La Cadena de Abastecimiento Público está conformada por 3 componentes: 1) PMBSO, 2) Gestión de Adquisiciones y 3) Administración de Bienes."
+                exp: "La Cadena comprende la PMBSO (identifica y programa), la Gestión de Adquisiciones (procedimientos de obtención) y la Administración de Bienes (ciclo de vida)."
             },
             {
-                question: "ENTE RECTOR — ¿Qué rol cumple la Dirección General de Abastecimiento (DGA) del MEF en el sistema?",
-                hint: "La DGA ejerce la máxima autoridad en materia de normas, procedimientos y directivas del SNA.",
+                question: "¿Qué papel cumple la Dirección General de Abastecimiento dentro del Sistema Nacional de Abastecimiento?",
+                hint: "Es el ente rector técnico-normativo del MEF.",
                 options: [
-                    "Ejercer la rectoría técnico-normativa, emitiendo reglas y directivas para ordenar la gestión del abastecimiento público.",
+                    "Ejercer la rectoría técnico-normativa del sistema, emitiendo disposiciones para ordenar la gestión del abastecimiento público.",
                     "Aprobar y firmar directamente los Expedientes de Contratación de todos los ministerios del Gobierno.",
                     "Resolver en última instancia administrativa los recursos de apelación interpuestos en licitaciones públicas.",
                     "Auditar anualmente los estados financieros y cuentas bancarias de las empresas contratistas del Estado.",
                     "Sancionar penalmente a los miembros del comité de selección por retrasos en los procesos."
                 ],
                 correct: 0,
-                exp: "La DGA del MEF es la autoridad técnico-normativa a nivel nacional encargada de emitir directivas y reglamentar el Sistema Nacional de Abastecimiento."
+                exp: "La DGA del MEF ejerce la rectoría técnico-normativa del sistema, emitiendo reglas y directivas para ordenar la gestión del abastecimiento."
             },
             {
-                question: "CICLO DE VIDA — ¿Por qué la gestión de abastecimiento no concluye con la firma del contrato o la compra del bien?",
-                hint: "Comprar el bien es solo el inicio; posteriormente se requiere registrarlo, conservarlo, mantenerlo y darle destino final.",
+                question: "¿Por qué la gestión de abastecimiento no termina con la contratación de un bien o servicio?",
+                hint: "Porque la contratación solo obtiene el recurso; luego sigue el registro, almacenamiento, custodia y disposición final.",
                 options: [
                     "Porque la ley exige extender las garantías comerciales por un periodo mínimo de diez años sin excepción.",
                     "Debido a que el pago al contratista debe diferirse hasta la culminación del periodo de gestión del titular.",
-                    "Porque la gestión abarca todo el ciclo de vida: almacenamiento, distribución, mantenimiento, custodia y disposición final.",
+                    "Porque la contratación solo permite obtener la prestación; luego corresponde registrar, almacenar, distribuir, conservar, mantener y dar de baja o disponer los bienes.",
                     "Porque las órdenes de compra emitidas bajo el SNA poseen vigencia indeterminada según la Ley N.º 32069.",
                     "Debido a que el proveedor seleccionado debe incorporarse a la planilla de la entidad contratante."
                 ],
                 correct: 2,
-                exp: "La gestión no termina con la compra; abarca la Administración de Bienes durante todo su ciclo de vida útil hasta su baja o disposición final."
+                exp: "La gestión no concluye con la compra; comprende todo el ciclo de vida del recurso (almacenamiento, mantenimiento, custodia y destino final)."
             },
             {
-                question: "TRAZABILIDAD — ¿Cuál es la importancia fundamental de mantener la trazabilidad en la Cadena de Abastecimiento?",
-                hint: "La trazabilidad permite reconstruir el historial de cada operación y saber exactamente dónde está cada recurso.",
+                question: "¿Por qué es importante la trazabilidad en la Cadena de Abastecimiento Público?",
+                hint: "Permite reconstruir actuaciones y conocer la situación de bienes/servicios para facilitar el control y la rendición de cuentas.",
                 options: [
                     "Garantizar la exoneración automática del impuesto general a las ventas para contrataciones regionales.",
-                    "Permitir reconstruir las actuaciones y conocer el estado de los recursos, facilitando el control y rendición de cuentas.",
+                    "Permitir reconstruir las actuaciones y conocer la situación de los recursos, facilitando el control, la rendición de cuentas e identificación de desviaciones.",
                     "Obligar a las entidades públicas a contratar de forma exclusiva con proveedores domiciliados en su localidad.",
                     "Impedir la suscripción de adendas o modificaciones contractuales durante la fase de ejecución de la obra.",
                     "Automatizar la liquidación de impuestos ante la SUNAT sin revisión humana posterior."
                 ],
                 correct: 1,
-                exp: "La trazabilidad permite reconstruir las actuaciones y conocer la situación de bienes, servicios u obras en cualquier etapa del proceso."
+                exp: "La trazabilidad permite reconstruir las actuaciones y conocer el estado del bien o servicio en cualquier etapa, asegurando transparencia y control."
             },
             {
-                question: "ENFOQUE DE CICLO DE VIDA — ¿En qué consiste gestionar los bienes públicos bajo un enfoque de ciclo de vida?",
-                hint: "Implica considerar el bien desde su incorporación hasta su destino final o baja.",
+                question: "¿Qué significa gestionar los bienes bajo un enfoque de ciclo de vida?",
+                hint: "No limitarse a comprarlos, sino planificar su incorporación, uso, mantenimiento e inventario hasta su destino final.",
                 options: [
-                    "Planificar la incorporación, registro, asignación, custodia, mantenimiento, aseguramiento e inventario final del bien.",
+                    "Significa no limitarse a adquirirlos, sino planificar su incorporación, registro, asignación, custodia, mantenimiento, aseguramiento, inventario y destino final.",
                     "Adquirir únicamente activos fijos que cuenten con una vida útil garantizada superior a veinte años continuos.",
                     "Renovar obligatoriamente la totalidad del parque automotor de la entidad al inicio de cada ejercicio fiscal.",
                     "Subcontratar la administración total de los almacenes con operadores logísticos del sector privado nacional.",
                     "Desechar de forma inmediata cualquier bien que requiera mantenimiento correctivo simple."
                 ],
                 correct: 0,
-                exp: "El enfoque de ciclo de vida planifica integralmente la incorporación, uso, mantenimiento, conservación y destino final de los bienes."
+                exp: "El enfoque de ciclo de vida contempla desde la incorporación del bien hasta su disposición final para asegurar su uso en fines institucionales."
             },
+
+            // SESIÓN 2
             {
-                question: "PMBSO — ¿Qué es la Programación Multianual de Bienes, Servicios y Obras y cuál es su horizonte temporal?",
-                hint: "Es el proceso de planificación de necesidades con una proyección mínima de 3 años.",
+                question: "¿Qué es la Programación Multianual de Bienes, Servicios y Obras y cuál es su finalidad?",
+                hint: "Proceso donde la entidad identifica y prioriza necesidades por un periodo mínimo de 3 años consecutivos.",
                 options: [
                     "Un informe contable trimestral presentado ante la Contraloría General para autorizar transferencias de partidas.",
                     "Un catálogo de proveedores certificados e inhabilitados para contratar con los ministerios del Estado.",
-                    "El proceso de identificar y consolidar necesidades para un horizonte multianual mínimo de tres años consecutivos.",
+                    "Es el proceso mediante el cual se identifican, clasifican, priorizan y consolidan necesidades para un horizonte multianual (mínimo 3 años) para vincularlas con los recursos.",
                     "La liquidación técnica y financiera de obras públicas ejecutadas mediante la modalidad de administración directa.",
                     "Un registro mensual de facturas pendientes de pago acumuladas en Tesorería."
                 ],
                 correct: 2,
-                exp: "La PMBSO es el proceso mediante el cual se identifican, priorizan y consolidan necesidades por un horizonte mínimo de 3 años consecutivos."
+                exp: "La PMBSO consolida las necesidades por un mínimo de 3 años para articular la disponibilidad de recursos con las contrataciones."
             },
             {
-                question: "CMN — ¿Qué función cumple el Cuadro Multianual de Necesidades dentro de la entidad?",
-                hint: "Es el documento normativo que organiza, consolida y prioriza las necesidades de bienes, servicios y obras.",
+                question: "¿Qué es el Cuadro Multianual de Necesidades y qué información organiza?",
+                hint: "Es el documento que consolida y prioriza las necesidades de bienes, servicios y obras del periodo.",
                 options: [
-                    "Consolidar, ordenar y priorizar las necesidades de bienes, servicios y obras para cumplir las metas institucionales.",
+                    "El documento que consolida las necesidades de bienes, servicios y obras identificadas por la entidad para ordenar y priorizar lo requerido según las metas.",
                     "Aprobar el presupuesto general de la república enviado por el Poder Ejecutivo al Congreso de la República.",
                     "Registrar la lista de contratistas sancionados con penalidad por mora durante el ejercicio presupuestal anterior.",
                     "Autorizar el desembolso directo de viáticos e insumos menores mediante la caja chica de la administración.",
                     "Sustituir las especificaciones técnicas elaboradas por las áreas usuarias de la entidad."
                 ],
                 correct: 0,
-                exp: "El CMN es el producto de la PMBSO que consolida y prioriza las necesidades cuantitativas de bienes, servicios y obras."
+                exp: "El CMN es el producto de la PMBSO que ordena y prioriza cuantitativamente las necesidades de la entidad."
             },
             {
-                question: "PRONÓSTICO DE DEMANDA — ¿Cómo contribuye el pronóstico de demanda a la identificación de necesidades?",
-                hint: "Permite usar estadísticas e historial para prever consumos futuros y evitar compras desordenadas.",
+                question: "¿Qué relación existe entre el pronóstico de demanda y la identificación de necesidades?",
+                hint: "El pronóstico anticipa requerimientos con datos e historia para evitar compras aisladas o improvisadas.",
                 options: [
                     "Reemplazar de forma definitiva la necesidad de contar con un Presupuesto Institucional de Apertura.",
-                    "Anticipar los requerimientos basándose en datos e historial, evitando compras improvisadas o por urgencia.",
+                    "El pronóstico de demanda permite anticipar los bienes, servicios y obras requeridos basándose en información disponible para evitar pedidos aislados o urgencias.",
                     "Determinar de forma automática la empresa ganadora de la Buena Pro en selecciones competitivas.",
                     "Eliminar la fase de priorización presupuestal en la formulación del Cuadro Multianual de Necesidades.",
                     "Garantizar que todos los insumos contratados sean importados del mercado exterior."
                 ],
                 correct: 1,
-                exp: "El pronóstico de demanda utiliza información técnica e histórica para anticipar las necesidades reales de la entidad."
+                exp: "El pronóstico de demanda utiliza información disponible y proyectada para dar sustento a la identificación de necesidades reales."
             },
             {
-                question: "FASES DE LA PMBSO — ¿Cuáles son las tres fases secuenciales de la Programación Multianual?",
-                hint: "Comienza reconociendo lo que se necesita, luego clasificando por importancia y finalmente aprobando el documento.",
+                question: "¿Cuáles son las fases de la PMBSO y qué se realiza en cada una?",
+                hint: "Son 3 fases: Identificación, Clasificación y Priorización, y Consolidación y Aprobación.",
                 options: [
                     "Convocatoria del Proceso, Evaluación de Propuestas Técnicas y Otorgamiento de la Buena Pro.",
                     "Alta Patrimonial, Inventario Físico de Almacén y Baja de Bienes por Obsolescencia Técnica.",
-                    "Identificación; Clasificación y Priorización; y Consolidación y Aprobación del Cuadro de Necesidades.",
+                    "Identificación (determina necesidades); Clasificación y Priorización (ordena por relevancia); y Consolidación y Aprobación (emite el CMN).",
                     "Certificación de Crédito Presupuestario, Compromiso Anual del Gasto y Liquidación de Pagos.",
                     "Indagación de Mercado, Cuadro Comparativo de Ofertas y Firma del Contrato Público."
                 ],
                 correct: 2,
-                exp: "Las tres fases normadas de la PMBSO son: 1. Identificación, 2. Clasificación y Priorización, y 3. Consolidación y Aprobación."
+                exp: "Las tres fases normadas de la PMBSO son 1) Identificación, 2) Clasificación y Priorización, y 3) Consolidación y Aprobación."
             },
             {
-                question: "FASE DE IDENTIFICACIÓN — ¿Cuál es el objetivo de la primera fase de la PMBSO?",
-                hint: "Las áreas usuarias determinan formalmente qué insumos requieren para cumplir con sus metas del POI.",
+                question: "¿Qué se busca con la fase de identificación?",
+                hint: "Reconocer las necesidades reales alineadas a las metas operativas a partir de información sustentada.",
                 options: [
-                    "Reconocer las necesidades de bienes, servicios y obras requeridas por las áreas usuarias para sus metas.",
+                    "Reconocer las necesidades de bienes, servicios y obras vinculadas con las actividades y metas de la entidad partiendo de información sustentada.",
                     "Seleccionar a las empresas privadas que participarán en las licitaciones públicas de la entidad.",
                     "Calcular el monto máximo de penalidades aplicables a los proveedores por incumplimiento de plazos.",
                     "Aprobar los Reglamentos de Organización y Funciones de la Oficina General de Administración.",
                     "Desestimar los pedidos de compras que no superen los 10 UIT."
                 ],
                 correct: 0,
-                exp: "En la fase de Identificación, las áreas usuarias cuantifican sus necesidades en función de sus actividades institucionales."
+                exp: "En la Identificación, las áreas usuarias fundamentan y determinan los insumos necesarios para sus metas institucionales."
             },
             {
-                question: "TRABAJO COLABORATIVO — ¿Por qué la PMBSO exige coordinación constante entre las dependencias de la entidad?",
-                hint: "Requiere el trabajo articulado entre quienes piden (Área Usuaria), quienes gestionan compras (Abastecimiento) y quienes dan presupuesto (Presupuesto).",
+                question: "¿Por qué la PMBSO requiere trabajo colaborativo entre las áreas de la entidad?",
+                hint: "Combina el conocimiento operativo (Áreas Usuarias), la logística (Abastecimiento) y el marco de recursos (Presupuesto).",
                 options: [
                     "Porque se requiere la firma manuscrita de la totalidad de los servidores públicos para validar el proceso.",
-                    "Porque combina el requerimiento operativo (Área Usuaria), la logística (Abastecimiento) y el marco de recursos (Presupuesto).",
+                    "Porque las áreas usuarias conocen la necesidad operativa, abastecimiento la organiza/consolida y presupuesto aporta el marco financiero.",
                     "Para evitar la implementación de sistemas informáticos centralizados como el módulo SIGA-MEF.",
                     "Debido a que la responsabilidad penal por desabastecimiento recae sobre todos los empleados institucionales.",
                     "Para permitir que cada departamento realice compras de forma independiente sin centralización."
                 ],
                 correct: 1,
-                exp: "La PMBSO requiere sinergia entre el área usuaria (necesidad), abastecimiento (gestión) y presupuesto (marco financiero)."
+                exp: "El trabajo coordinado entre usuario, abastecimiento y presupuesto garantiza la factibilidad técnica y financiera del CMN."
             },
             {
-                question: "APM — ¿Qué es la Asignación Presupuestaria Multianual y qué impacto tiene en el CMN?",
-                hint: "Es el techo presupuestal informado por el MEF para un horizonte de 3 años.",
+                question: "¿Qué es la Asignación Presupuestaria Multianual y cómo incide en la programación?",
+                hint: "Es el techo financiero informado por el MEF para un periodo de 3 años.",
                 options: [
                     "La transferencia bancaria directa realizada por el Banco de la Nación a las cuentas de los proveedores.",
                     "El monto total recaudado por la entidad por concepto de tasas administrativas durante el ejercicio fiscal.",
-                    "El límite máximo de recursos presupuestarios asignado por el MEF a un pliego, sirviendo de techo para programar.",
+                    "Es el límite máximo de recursos presupuestarios asignado por el MEF a un pliego para 3 años, sirviendo de marco para la programación.",
                     "El fondo de reserva de contingencia destinado exclusivamente al pago de sentencias judiciales firmes.",
                     "El límite legal para el otorgamiento de adelantos económicos en contratos de obra."
                 ],
                 correct: 2,
-                exp: "La APM establece el límite financiero máximo asignado por el MEF sobre el cual la entidad debe equilibrar su CMN."
+                exp: "La APM fija el marco o techo económico informado por el MEF sobre el cual la entidad ajusta y programa sus necesidades."
             },
             {
-                question: "DEFICIENCIAS EN PROGRAMACIÓN — ¿Qué consecuencias genera una deficiente programación de necesidades?",
-                hint: "Provoca desabastecimiento, sobrecostos por compras urgentes o acumulación innecesaria en almacenes.",
+                question: "¿Qué consecuencias puede generar una programación deficiente de necesidades?",
+                hint: "Provoca requerimientos tardíos, compras urgentes, duplicidad y existencias innecesarias.",
                 options: [
-                    "Genera desabastecimiento, compras de urgencia, duplicidades o existencias innecesarias que impiden metas.",
+                    "Requerimientos tardíos, compras urgentes, duplicidad de adquisiciones, desabastecimiento o existencias innecesarias que impiden cumplir metas.",
                     "Aumenta automáticamente el salario del personal técnico de la Oficina Encargada de las Contrataciones.",
                     "Provoca la cancelación inmediata de la personería jurídica e institucional del pliego correspondiente.",
                     "Exime a la entidad de rendir cuentas anuales ante la Contraloría General de la República.",
                     "Fomenta el incremento automático de la Asignación Presupuestaria Multianual asignada."
                 ],
                 correct: 0,
-                exp: "Una mala programación ocasiona desabastecimiento, sobrecostos por urgencias o acumulación inútil en almacenes."
+                exp: "Programar de forma deficiente perjudica la continuidad del servicio, encarece compras y genera sobrantes inutilizados."
             },
             {
-                question: "VÍNCULO PMBSO Y PREPARATORIAS — ¿Cómo se relaciona la PMBSO con la fase de Actuaciones Preparatorias?",
-                hint: "El CMN proporciona la información base de qué y cuándo comprar para armar el requerimiento.",
+                question: "¿Cómo se conecta la PMBSO con las actuaciones preparatorias de una contratación?",
+                hint: "Aporta la información de qué y cuándo se requiere para segmentar e inicar el requerimiento.",
                 options: [
                     "Permite omitir la indagación de mercado y adjudicar el contrato de forma directa al proveedor tradicional.",
-                    "Proporciona la información previa de qué se requiere y cuándo, sirviendo de base para armar el requerimiento.",
+                    "Proporciona la información previa de qué necesita la entidad y cuándo, sirviendo de base para la segmentación y elaboración del requerimiento.",
                     "Sustituye el requisito legal de contar con Bases Integradas en los procedimientos de selección.",
                     "Modifica los plazos para interponer recursos de apelación ante el Tribunal de Contrataciones.",
                     "Elimina la obligación de aprobar el expediente de contratación mediante resolución."
                 ],
                 correct: 1,
-                exp: "La información registrada en la PMBSO sirve de insumo clave para estructurar el requerimiento y la estrategia de compra."
+                exp: "La PMBSO provee los insumos iniciales indispensables para definir las actuaciones preparatorias y la estrategia de compra."
             },
+
+            // SESIÓN 3
             {
-                question: "ACTUACIONES PREPARATORIAS — ¿Cuál es el propósito central de la etapa preparatoria en la contratación pública?",
-                hint: "Es la etapa donde se organiza la compra: requerimiento, estudio de mercado, estrategia y expediente de contratación.",
+                question: "¿Cuál es el propósito de las actuaciones preparatorias dentro del proceso de contratación?",
+                hint: "Definir la necesidad y organizar las decisiones previas a la selección del proveedor.",
                 options: [
                     "Ejecutar los desembolsos económicos finales a favor de las empresas ganadoras de la Buena Pro.",
-                    "Definir con precisión la necesidad y organizar de forma informada las decisiones previas a la convocatoria.",
+                    "Definir con precisión la necesidad y organizar de forma informada las decisiones previas a la selección (requerimiento, estrategia, expediente, bases).",
                     "Realizar la auditoría a posteriori de los suministros consumidos durante el ejercicio fiscal anterior.",
                     "Suscribir las actas definitivas de recepción y conformidad de obras de infraestructura pública.",
                     "Aprobar la liquidación final del contrato de consultoría de obra."
                 ],
                 correct: 1,
-                exp: "Las actuaciones preparatorias organizan las decisiones técnicas, legales y de mercado antes de convocar el proceso."
+                exp: "Las actuaciones preparatorias organizan y estructuran la contratación antes de convocar al mercado."
             },
             {
-                question: "SEGMENTACIÓN — ¿En qué consiste la segmentación de contrataciones y cuál es su objetivo?",
-                hint: "Clasifica las compras en categorías según su impacto y riesgo para aplicar la mejor estrategia.",
+                question: "¿Qué es la segmentación de contrataciones y para qué se utiliza?",
+                hint: "Es clasificar las contrataciones en categorías para gestionar riesgos y obtener valor por el dinero.",
                 options: [
                     "Dividir una compra de gran volumen en pequeñas compras para evitar convocar a Licitación Pública.",
-                    "Clasificar las contrataciones por categorías según su cuantía y riesgo para lograr el mayor valor por el dinero.",
+                    "Clasificar las contrataciones en categorías para organizar recursos, gestionar riesgos y buscar el mayor valor por el dinero.",
                     "Separar los comprobantes de pago emitidos por los proveedores según la fecha de su vencimiento.",
                     "Asignar correlativamente códigos de inventario a los equipos de cómputo adquiridos por la entidad.",
                     "Filtrar a los proveedores del RNP por su cantidad de trabajadores en planilla."
                 ],
                 correct: 1,
-                exp: "La segmentación clasifica las contrataciones en categorías según su valor y riesgo para definir la estrategia de compra adecuada."
+                exp: "La segmentación ayuda a definir la mejor estrategia según la complejidad, cuantía y nivel de riesgo de cada contratación."
             },
             {
-                question: "REQUERIMIENTO — ¿Por qué el requerimiento formulado por el área usuaria debe ser claro y objetivo?",
-                hint: "Evita que el requerimiento favorezca a una marca específica o que genere ofertas insatisfactorias.",
+                question: "¿Por qué el requerimiento debe ser claro, objetivo y responder a la necesidad institucional?",
+                hint: "Evita especificaciones ambiguas o restrictivas que generen ofertas inadecuadas o controversias.",
                 options: [
                     "Para garantizar que un único fabricante local resulte adjudicado de forma exclusiva en el proceso.",
-                    "Porque de ser ambiguo o sesgado, generará ofertas inadecuadas, controversias o insatisfacción pública.",
+                    "Porque expresa la necesidad real; si es ambiguo o restrictivo genera ofertas inadecuadas, controversias o resultados deficientes.",
                     "Para evitar que empresas extranjeras participen en los procedimientos de selección convocados.",
                     "Debido a que la normativa prohíbe realizar precisiones o aclaraciones durante la consulta a bases.",
                     "Para trasladar toda la responsabilidad técnica de la definición al comité de selección."
                 ],
                 correct: 1,
-                exp: "Un requerimiento objetivo garantiza la libre concurrencia y asegura que la propuesta seleccionada satisfaga la necesidad real."
+                exp: "Un requerimiento objetivo garantiza libre competencia y la obtención de bienes u obras que satisfagan el fin público."
             },
             {
-                question: "ESTRATEGIA DE CONTRATACIÓN — ¿Qué función cumple la estrategia de contratación en el proceso?",
-                hint: "Es la hoja de ruta que evalúa el mercado y los riesgos para elegir el mejor camino de compra.",
+                question: "¿Qué es la estrategia de contratación y qué decisiones orienta?",
+                hint: "Organiza las decisiones sobre mercado, riesgos, oportunidad y modalidades para lograr valor por el dinero.",
                 options: [
                     "Un plan publicitario utilizado por los postores para promocionar sus productos ante el comité.",
-                    "Organizar decisiones evaluando mercado, riesgos y modalidades para lograr el mayor valor por el dinero.",
+                    "Organizar las decisiones (mercado, riesgos, oportunidad y mecanismos) para atender la necesidad con eficiencia y valor por el dinero.",
                     "La solicitud de ampliación presupuestal remitida por el titular del pliego ante la Comisión de Presupuesto.",
                     "El recurso de impugnación presentado por los participantes ante el Tribunal del OECE.",
                     "El acta de reunión previa firmada entre los funcionarios logísticos y los postores."
                 ],
                 correct: 1,
-                exp: "La estrategia organiza decisiones sobre empaquetamiento, modalidades y mitigación de riesgos para optimizar recursos."
+                exp: "La estrategia traza la hoja de ruta técnica y comercial óptima antes de lanzar el procedimiento de selección."
             },
             {
-                question: "INTERACCIÓN CON EL MERCADO — ¿Cuál es el objetivo de interactuar con el mercado previo a la convocatoria?",
-                hint: "Permite saber si lo que pide la entidad existe comercialmente, a qué precios y bajo qué condiciones.",
+                question: "¿Cuál es la finalidad de la interacción con el mercado?",
+                hint: "Recopilar datos del mercado para conocer sus condiciones, validar el requerimiento y tomar decisiones informadas.",
                 options: [
-                    "Recopilar información del mercado para validar el requerimiento y conocer las condiciones comerciales.",
+                    "Recopilar información de proveedores y del mercado para conocer las condiciones comerciales y validar el requerimiento.",
                     "Acordar en privado el precio final de adjudicación directamente con un proveedor determinado.",
                     "Otorgar la Buena Pro de manera anticipada antes de publicar las bases en el sistema SEACE.",
                     "Inspeccionar las instalaciones administrativas de todos los postores inscritos en el RNP.",
                     "Fijar penalidades personalizadas fuera del marco legal establecido en el reglamento."
                 ],
                 correct: 0,
-                exp: "Interactuar con el mercado recopila información para ajustar el requerimiento y conocer la disponibilidad y precios reales."
+                exp: "Interactuar con el mercado permite verificar la factibilidad comercial del requerimiento y obtener información objetiva."
             },
             {
-                question: "DEFINICIÓN VS REQUERIMIENTO — ¿Cuál es la distinción conceptual entre 'necesidad' y 'requerimiento'?",
-                hint: "La necesidad es el problema a resolver; el requerimiento es el documento formal con especificaciones técnicas.",
+                question: "¿Qué diferencia existe entre la definición de la necesidad y la elaboración del requerimiento?",
+                hint: "La necesidad identifica el problema; el requerimiento la traduce en especificaciones y condiciones técnicas.",
                 options: [
                     "No existe diferencia; ambos términos son legalmente sinónimos en la normativa de contrataciones.",
-                    "La necesidad identifica el problema a atender; el requerimiento la traduce en especificaciones técnicas concretas.",
+                    "La definición de la necesidad identifica el problema a atender; el requerimiento traduce esa necesidad en características y prestaciones concretas.",
                     "La necesidad la define el proveedor y el requerimiento lo aprueba la Contraloría General.",
                     "El requerimiento se elabora en la ejecución contractual y la necesidad al momento del pago.",
                     "La necesidad es un documento contable y el requerimiento un permiso ambiental."
                 ],
                 correct: 1,
-                exp: "La necesidad identifica el problema o meta institucional; el requerimiento traduce esa necesidad en términos de referencia o especificaciones."
+                exp: "La necesidad responde al 'qué falta o qué problema existe'; el requerimiento establece el detalle técnico para contratarlo."
             },
             {
-                question: "EXPEDIENTE DE CONTRATACIÓN — ¿Qué rol cumple el Expediente de Contratación en la etapa preparatoria?",
-                hint: "Es la carpeta técnica que contiene todos los sustentos legales, económicos y técnicos de la contratación.",
+                question: "¿Qué función cumple el expediente de contratación en esta etapa?",
+                hint: "Reúne la documentación y decisiones que respaldan y autorizan la contratación.",
                 options: [
-                    "Compilar y respaldar documentalmente todas las actuaciones que sustentan la legalidad y viabilidad de la compra.",
+                    "Reunir la documentación y decisiones que sustentan la contratación, permitiendo autorizar el inicio de la selección.",
                     "Autorizar la cancelación de facturas electrónicas pendientes de pago de ejercicios anteriores.",
                     "Servir como comprobante de pago frente a la Superintendencia Nacional de Aduanas y Administración Tributaria.",
                     "Inscribir la titularidad de los bienes inmuebles estatales en los registros públicos de la SUNARP.",
                     "Publicar las ofertas no ganadoras en los medios de comunicación masiva."
                 ],
                 correct: 0,
-                exp: "El expediente reúne los documentos que sustentan la disponibilidad presupuestal, estudio de mercado y legalidad para contratar."
+                exp: "El expediente compila las actuaciones preparatorias que sustentan la viabilidad técnica, económica y legal del proceso."
             },
             {
-                question: "EVALUADORES — ¿Por qué es crítico designar a los evaluadores o comité antes de lanzar la selección?",
-                hint: "Asigna formalmente la responsabilidad técnica a profesionales calificados para conducir la evaluación.",
+                question: "¿Qué importancia tiene la designación de evaluadores antes de la selección?",
+                hint: "Identifica a los responsables cualificados para realizar la evaluación de las ofertas.",
                 options: [
                     "Para eximir de responsabilidad administrativa al titular de la entidad en caso de controversias.",
-                    "Garantizar que la conducción del proceso y evaluación de ofertas recaiga en personas idóneas y responsables.",
+                    "Identificar a los responsables cualificados que evaluarán las ofertas, garantizando objetividad y competencia legal.",
                     "Asegurar que la oferta económica de mayor valor monetario resulte ganadora en la selección.",
                     "Sustituir la necesidad de publicar las bases integradas en el portal del sistema SEACE.",
                     "Permitir la participación de evaluadores sin experiencia técnica en el objeto del proceso."
                 ],
                 correct: 1,
-                exp: "Designar evaluadores competentes garantiza objetividad, capacidad técnica e idoneidad en la calificación de ofertas."
+                exp: "Designar evaluadores fija formalmente la competencia y responsabilidad de conducir la calificación de postores."
             },
+
+            // SESIÓN 4
             {
-                question: "PROCEDIMIENTO DE SELECCIÓN — ¿Qué es un procedimiento de selección y cuál es su fin primordial?",
-                hint: "Es el proceso administrativo donde se evalúan ofertas competitivas para elegir la propuesta ganadora.",
+                question: "¿Qué es un procedimiento de selección y cuál es su finalidad?",
+                hint: "Procedimiento administrativo de gestión para seleccionar un proveedor, elegir la mejor oferta y perfeccionar el contrato.",
                 options: [
                     "Un juicio penal tramitado ante el Poder Judicial para sancionar delitos cometidos por funcionarios.",
-                    "Un procedimiento administrativo para evaluar ofertas, seleccionar la opción conveniente y perfeccionar el contrato.",
+                    "Un procedimiento administrativo que comprende actos de gestión para seleccionar a un proveedor, elegir la mejor oferta y perfeccionar el contrato.",
                     "Una auditoría de estados financieros realizada por una firma externa e independiente.",
                     "Un acto de negociación privada entre la entidad pública y empresas internacionales sin regulación.",
                     "Una encuesta de satisfacción aplicada a los usuarios finales del servicio."
                 ],
                 correct: 1,
-                exp: "Su finalidad es evaluar ofertas bajo reglas claras para seleccionar la propuesta más conveniente y perfeccionar el contrato."
+                exp: "Su fin primordial es la selección objetiva e idónea de la propuesta que mejor atienda el requerimiento público."
             },
             {
-                question: "COMPETITIVO VS NO COMPETITIVO — ¿Qué diferencia a un procedimiento competitivo de uno no competitivo?",
-                hint: "El competitivo convoca libremente al mercado; el no competitivo aplica excepcionalmente (ej. proveedor único).",
+                question: "¿Qué diferencia existe entre un procedimiento competitivo y uno no competitivo?",
+                hint: "El competitivo convoca libremente para comparar ofertas; el no competitivo aplica solo bajo supuestos legales específicos.",
                 options: [
                     "El competitivo se realiza sin presupuesto y el no competitivo requiere certificación del gasto.",
-                    "El competitivo convoca al mercado para comparar ofertas; el no competitivo aplica solo en supuestos legales específicos.",
+                    "El competitivo convoca al mercado para comparar ofertas; el no competitivo procede únicamente en supuestos legales tipificados.",
                     "El no competitivo permite comprar sin límites de precio ni fiscalización a posteriori del órgano de control.",
                     "El competitivo aplica solo para la construcción de obras e infraestructura y el no competitivo para consultorías.",
                     "No existen diferencias formales dentro del marco normativo del SNA."
                 ],
                 correct: 1,
-                exp: "Los procesos competitivos promueven la pluralidad de postores; los no competitivos proceden solo por excepciones legalmente tipificadas."
+                exp: "La regla general es la competencia publica; la contratación no competitiva es excepcional y requiere estricto sustento legal."
             },
             {
-                question: "ETAPAS DEL PROCESO — ¿Cuál es la secuencia lógica de etapas en un procedimiento competitivo?",
-                hint: "Inicia convocando, pasa por consultas a bases, integración, evaluación de propuestas y adjudicación de la Buena Pro.",
+                question: "¿Cuáles son las principales etapas de un procedimiento competitivo?",
+                hint: "Convocatoria, cuestionamiento a bases, integración, evaluación de ofertas, buena pro y solución de controversias.",
                 options: [
-                    "Convocatoria, cuestionamiento a bases, integración de bases, evaluación de ofertas y otorgamiento de la Buena Pro.",
+                    "Convocatoria, cuestionamientos a las bases, integración de bases, evaluación de ofertas, otorgamiento de la buena pro y solución de controversias.",
                     "Elaboración del CMN, Asignación Presupuestal, Emisión de Orden de Compra y Desembolso de Pago.",
                     "Alta Patrimonial, Inventario Físico de Almacén, Mantenimiento y Disposición Final del Bien.",
                     "Solicitud de Cotización, Cuadro Comparativo, Conformidad Técnica y Cancelación de Factura.",
                     "Firma del Contrato, Otorgamiento de Adelanto, Ejecución de Obra y Liquidación Financiera."
                 ],
                 correct: 0,
-                exp: "La secuencia normada incluye: Convocatoria, consultas/observaciones, integración de bases, evaluación y otorgamiento de la Buena Pro."
+                exp: "Estas etapas secuenciales garantizan la transparencia, defensa de los postores y la correcta elección de la propuesta."
             },
             {
-                question: "BASES INTEGRADAS — ¿Qué significan las Bases Integradas dentro del procedimiento de selección?",
-                hint: "Son las reglas definitivas e inalterables fijadas tras absolver todas las consultas de los participantes.",
+                question: "¿Qué función cumplen las bases integradas dentro del procedimiento?",
+                hint: "Consolidan las reglas definitivas del proceso tras absolver las consultas y observaciones.",
                 options: [
                     "Reemplazar al contrato suscrito en caso de que el contratista decida no presentarse a la firma.",
-                    "Son las reglas definitivas del proceso tras absolver consultas y observaciones, de obligatorio cumplimiento.",
+                    "Consolidar las reglas definitivas e inalterables del procedimiento que obligan a participantes y evaluadores.",
                     "Inhabilitar de forma automática a los postores que hayan formulado consultas al pliego.",
                     "Aumentar unilateralmente el presupuesto institucional aprobado para la contratación.",
                     "Un borrador preliminar sujeto a cambios durante la etapa de evaluación de ofertas."
                 ],
                 correct: 1,
-                exp: "Las bases integradas contienen las reglas definitivas que obligan tanto a la entidad como a todos los participantes."
+                exp: "Las bases integradas constituyen las reglas del juego definitivas tanto para los postores como para el comité evaluador."
             },
             {
-                question: "CUESTIONAMIENTO A BASES — ¿Qué función cumple la etapa de consultas y observaciones a las bases?",
-                hint: "Permite a los proveedores aclarar dudas o advertir contravenciones a la norma antes de la integración.",
+                question: "¿Qué función cumple la etapa de cuestionamiento a las bases?",
+                hint: "Permite a los participantes formular observaciones o consultas para aclarar o corregir las reglas.",
                 options: [
                     "Permitir que los postores reduzcan en secreto sus montos económicos ofertados.",
-                    "Brindar un mecanismo legal para solicitar aclaraciones o advertir vulneraciones, corrigiendo las bases.",
+                    "Permitir que los participantes formulen consultas u observaciones para aclarar o corregir aspectos de las bases antes de integrarlas.",
                     "Suspender por tiempo indefinido la totalidad de las compras públicas de la entidad.",
                     "Reemplazar al comité de selección por un árbitro único designado por el OSCE.",
                     "Otorgar puntaje adicional a las empresas que formulen la mayor cantidad de observaciones."
                 ],
                 correct: 1,
-                exp: "Permite depurar y corregir las bases del proceso antes de su integración definitiva."
+                exp: "El cuestionamiento purga vicios o ambigüedades de las bases iniciales antes de su integración."
             },
             {
-                question: "ELECCIÓN DEL PROCESO — ¿Qué factores debe ponderar la entidad para elegir el tipo de procedimiento aplicable?",
-                hint: "Debe considerar el objeto (bien, servicio u obra), la cuantía en soles y la complejidad del requerimiento.",
+                question: "¿Qué debe considerar la entidad para elegir el procedimiento de selección aplicable?",
+                hint: "Objeto de contratación, cuantía en soles, condiciones particulares y causales tipificadas en la ley.",
                 options: [
                     "Únicamente la celeridad del trámite y la preferencia del encargado de compras.",
-                    "El objeto de la contratación, la cuantía, complejidad y los supuestos establecidos en la ley.",
+                    "El objeto de la contratación, la cuantía, las condiciones particulares y los supuestos previstos en la Ley y el Reglamento.",
                     "La ubicación geográfica del domicilio fiscal de la empresa participante.",
                     "La cantidad total de folios que contenga el expediente de contratación.",
                     "La urgencia expresada verbalmente por los usuarios de la entidad."
                 ],
                 correct: 1,
-                exp: "El tipo de procedimiento de selección depende estrictamente del objeto del contrato, su cuantía y las causales de la norma."
+                exp: "La elección del procedimiento se realiza de manera objetiva conforme a los umbrales de cuantía y naturaleza del objeto."
             },
+
+            // SESIÓN 5
             {
-                question: "CONTRATO PÚBLICO — ¿Cómo se define el contrato público bajo el marco normativo de contrataciones?",
-                hint: "Es el acuerdo regulado que vincula a la Entidad y al contratista para la entrega de prestaciones.",
+                question: "¿Qué es el contrato público en el marco de la contratación estatal?",
+                hint: "Acuerdo normado para crear, regular, modificar o extinguir una relación jurídica vinculante entre la Entidad y el contratista.",
                 options: [
                     "Un acuerdo privado de partes regido exclusivamente por las disposiciones del Código Civil.",
-                    "El acuerdo normado que crea o modifica una relación jurídica entre la Entidad y el contratista para prestaciones.",
+                    "El acuerdo destinado a crear, regular, modificar o extinguir una relación jurídica que vincula a la Entidad y al contratista en sus prestaciones.",
                     "Una promesa verbal de pago emitida por el jefe de la oficina de logística.",
                     "Un certificado bancario de depósito emitido a favor del Ministerio de Economía.",
                     "Un convenio de cooperación interinstitucional sin compromisos económicos."
                 ],
                 correct: 1,
-                exp: "El contrato público crea, regula, modifica o extingue obligaciones jurídicas vinculadas a la provisión de bienes, servicios u obras."
+                exp: "El contrato público formaliza los derechos y compromisos recíprocos entre el Estado y el proveedor adjudicado."
             },
             {
-                question: "REGISTRO EN SEACE — ¿Por qué la Ley exige registrar el contrato en el SEACE dentro de los 10 días hábiles?",
-                hint: "Permite transparentar la información ante la ciudadanía y los organismos de control.",
+                question: "¿Por qué el contrato debe registrarse en el SEACE?",
+                hint: "Para otorgar publicidad, transparencia y trazabilidad a la información contractual (plazo de 10 días hábiles).",
                 options: [
                     "Para aplicar retenciones del impuesto a la renta en tiempo real con la SUNAT.",
-                    "Garantizar la publicidad, transparencia y trazabilidad de la contratación ante la ciudadanía y control.",
+                    "Para dar publicidad y trazabilidad a la contratación y su información, registrándolo dentro de los 10 días hábiles siguientes a la firma.",
                     "Evitar que otras entidades puedan contratar servicios con la misma empresa.",
                     "Obtener el visto bueno formal de los organismos multilaterales de crédito.",
                     "Activar de forma automática la póliza de seguro contra accidentes laborales."
                 ],
                 correct: 1,
-                exp: "El registro en el SEACE es obligatorio para garantizar la publicidad, transparencia y fiscalización de la gestión contractual."
+                exp: "El registro público en el SEACE dentro de los 10 días hábiles de suscrito garantiza el control ciudadano y la fiscalización."
             },
             {
-                question: "EJECUCIÓN CONTRACTUAL — ¿En qué consiste la etapa de ejecución contractual?",
-                hint: "Comprende la entrega de los bienes o servicios, el seguimiento, la conformidad técnica y el pago final.",
+                question: "¿Qué se entiende por ejecución contractual?",
+                hint: "Etapa posterior a la firma donde las partes cumplen sus obligaciones: seguimiento, conformidad, pago y modificaciones.",
                 options: [
                     "La fase preparatoria en que se aprueba el presupuesto institucional de apertura.",
-                    "El periodo donde las partes cumplen sus prestaciones: seguimiento, conformidad, pago y modificaciones.",
+                    "La etapa en que la entidad y el contratista cumplen las prestaciones asumidas, incluyendo seguimiento, conformidad, pagos y modificaciones.",
                     "El procedimiento administrativo sancionador aplicado a postores no presentados.",
                     "El remate público de bienes muebles declarados en baja patrimonial por almacén.",
                     "La evaluación de propuestas económicas en acto público presencial."
                 ],
                 correct: 1,
-                exp: "Comprende la ejecución de prestaciones, el seguimiento técnico, otorgamiento de conformidad y cancelación del pago."
+                exp: "La ejecución contractual es el desarrollo práctico de las obligaciones asumidas hasta la conformidad final y pago."
             },
             {
-                question: "MODIFICACIÓN CONTRACTUAL — ¿Cuál es el límite esencial al realizar modificaciones al contrato vigentes?",
-                hint: "Se pueden realizar cambios necesarios, pero sin romper el equilibrio económico ni cambiar el objeto.",
+                question: "¿En qué consiste la modificación contractual y cuál es su límite esencial?",
+                hint: "Permite ajustar el contrato para cumplir la finalidad pública, sin afectar el equilibrio económico-financiero.",
                 options: [
                     "Permitir al contratista cambiar libremente el objeto del contrato por uno totalmente distinto.",
-                    "Ajustar el contrato para cumplir la finalidad pública, sin alterar el equilibrio económico ni la esencia del objeto.",
+                    "Permite ajustar el contrato para alcanzar la finalidad pública normada, con el límite de no afectar el equilibrio económico-financiero.",
                     "Duplicar el monto contractual sin requerir sustento técnico ni disponibilidad presupuestal.",
                     "Sustituir al contratista adjudicado por otra empresa subcontratada sin autorización.",
                     "Eximir al proveedor de la aplicación de penalidades reglamentarias por mora."
                 ],
                 correct: 1,
-                exp: "Las modificaciones deben garantizar la finalidad pública del contrato sin desnaturalizar su objeto ni romper la equivalencia financiera."
+                exp: "Las modificaciones responden a necesidades imprevistas para lograr el fin público pero sin alterar la equivalencia de prestaciones."
             },
             {
-                question: "EQUILIBRIO ECONÓMICO — ¿Qué significa preservar el equilibrio económico-financiero del contrato?",
-                hint: "Mantiene la proporción entre lo que entrega el proveedor y el pago que recibe de la entidad.",
+                question: "¿Qué significa preservar el equilibrio económico-financiero del contrato?",
+                hint: "Mantener la proporción económica original de las prestaciones sin romper la equivalencia ni cargar sobrecostos injustificados.",
                 options: [
                     "Garantizar que el contratista obtenga márgenes de utilidad netos superiores al 50%.",
-                    "Mantener la equivalencia entre prestaciones y contraprestaciones acordadas originalmente entre las partes.",
+                    "Mantener la relación económica original entre prestaciones y contraprestaciones, evitando alterar injustificadamente dicha equivalencia.",
                     "Eximir a la Entidad de la obligación de tramitar adicionales o mayores metrados de obra.",
                     "Fijar un tipo de cambio monetario congelado para compras en moneda extranjera.",
                     "Transferir los costos de supervisión técnica de la obra al contratista ejecutor."
                 ],
                 correct: 1,
-                exp: "Consiste en conservar el balance de derechos y cargas económicas pactado inicialmente entre la entidad y el contratista."
+                exp: "Preservar el equilibrio económico protege el valor original ofertado y evita afectaciones patrimoniales unilaterales."
             },
             {
-                question: "CONFORMIDAD DE PRESTACIÓN — ¿Qué función cumple la verificación técnica antes de emitir la conformidad?",
-                hint: "Comprueba que los bienes o servicios entregados cumplen al 100% las especificaciones de las bases.",
+                question: "¿Qué función cumple la verificación del cumplimiento de obligaciones?",
+                hint: "Comprueba que la prestación se ejecutó según lo pactado para sustentar la conformidad y el pago.",
                 options: [
-                    "Comprobar que las prestaciones se ejecutaron conforme a lo estipulado, siendo requisito indispensable para el pago.",
-                    "Validar que el proveedor haya pagado sus tributos ante la municipalidad correspondiente.",
-                    "Sustituir la inspección física de los almacenes por una declaración jurada simple.",
-                    "Determinar incrementos salariales para los especialistas de la Oficina de Abastecimiento.",
-                    "Autorizar el inicio del proceso de selección para la siguiente etapa anual."
+                    "Comprobar que el contratista ejecutó las prestaciones conforme al contrato y que la entidad cumplió lo suyo, sustentando la conformidad y el pago.",
+                    "Validar exclusivamente que el proveedor haya pagado sus tributos e impuestos ante la SUNAT.",
+                    "Sustituir la inspección física de los almacenes por una declaración jurada simple del contratista.",
+                    "Determinar incrementos salariales para los especialistas de la Oficina General de Abastecimiento.",
+                    "Autorizar el inicio del procedimiento de selección para el siguiente ejercicio fiscal."
                 ],
                 correct: 0,
-                exp: "La verificación del cumplimiento da sustento a la conformidad técnica y es condición previa e indispensable para efectuar el pago."
+                exp: "Verificar el cumplimiento es la acción técnica de fiscalización indispensable para otorgar la conformidad y tramitar el pago."
             },
+
+            // SESIÓN 6
             {
-                question: "ADMINISTRACIÓN DE BIENES — ¿Qué comprende el componente de Administración de Bienes en el SNA?",
-                hint: "Se ocupa de la recepción, almacenamiento, distribución, mantenimiento y disposición final de los activos.",
+                question: "¿Qué comprende la Administración de Bienes dentro de la Cadena de Abastecimiento Público?",
+                hint: "Gestión integral de bienes muebles e inmuebles: incorporación, registro, custodia, mantenimiento y destino final.",
                 options: [
                     "La adquisición exclusiva de suministros de oficina y papelería para las sedes centrales.",
-                    "La gestión integral de bienes muebles e inmuebles: recepción, registro, custodia, mantenimiento y destino final.",
+                    "Es el componente del SNA orientado a la gestión integral de bienes muebles e inmuebles: incorporación, registro, asignación, custodia, conservación y destino final.",
                     "La elaboración de términos de referencia para la contratación de consultorías individuales.",
                     "El cobro de tasas administrativas por concepto de licencias de edificación urbana.",
                     "La fiscalización tributaria de las propiedades inmuebles privadas."
                 ],
                 correct: 1,
-                exp: "Comprende los procedimientos para la recepción, registro, almacenamiento, conservación, mantenimiento y destino final de los bienes."
+                exp: "Comprende la vida útil patrimonial de los activos estatales para garantizar su uso eficiente y preservación."
             },
             {
-                question: "ALTA VS ADQUISICIÓN — ¿Cuál es la diferencia entre el 'alta patrimonial' y la 'adquisición' de un bien?",
-                hint: "La adquisición es el título de compra/donación; el Alta es el acto administrativo que lo ingresa al registro de la entidad.",
+                question: "¿Qué diferencia existe entre alta patrimonial y adquisición de un bien?",
+                hint: "La adquisición es la forma de obtención (compra/donación); el alta es el procedimiento de incorporación al registro patrimonial.",
                 options: [
                     "Son términos legalmente idénticos que no poseen diferencia técnica en contabilidad pública.",
-                    "La adquisición es la forma de obtención (compra/donación); el alta es el acto administrativo que lo registra en el patrimonio.",
+                    "La adquisición es la forma de obtener el bien (ej. compra); el alta es el procedimiento administrativo de incorporación a los registros patrimoniales.",
                     "El alta patrimonial la aprueba la SUNAT y la adquisición la realiza la empresa contratista.",
                     "La adquisición se aplica solo a terrenos e inmuebles y el alta a bienes intangibles.",
                     "El alta patrimonial destruye contablemente el bien y la adquisición lo restaura."
                 ],
                 correct: 1,
-                exp: "La adquisición es la modalidad de incorporación (compra, donación); el alta es el acto formal que lo ingresa al registro patrimonial."
+                exp: "La adquisición constituye el título o mecanismo de ingreso legal; el alta es la anotación formal en el inventario de la Entidad."
             },
             {
-                question: "INVENTARIO FÍSICO — ¿Cuál es el objetivo principal de realizar el inventario físico anual de bienes?",
-                hint: "Constatar que lo que figura en los libros contables exista físicamente en las oficinas y almacenes.",
+                question: "¿Cuál es la finalidad del inventario físico de bienes muebles?",
+                hint: "Verificar existencia, ubicación y estado de conservación de los bienes para conciliar patrimonio y contabilidad.",
                 options: [
                     "Vender en subasta pública los bienes que cuenten con más de un año de antigüedad.",
-                    "Verificar la presencia física, ubicación y estado de los bienes, conciliando los registros patrimoniales y contables.",
+                    "Verificar existencia, ubicación, características y conservación de los bienes, conciliando la información patrimonial con la contable.",
                     "Sancionar de forma inmediata al personal encargado de los depósitos de almacenamiento.",
                     "Duplicar el valor de depreciación de los activos fijos registrados en el balance anual.",
                     "Transferir automáticamente los equipos en uso hacia otras entidades del sector público."
                 ],
                 correct: 1,
-                exp: "El inventario físico verifica la presencia real, ubicación y estado de conservación de los bienes, conciliándolos con la contabilidad."
+                exp: "El inventario físico anual permite contrastar la realidad física de los activos frente a los registros en libros."
             },
             {
-                question: "SOBRANTES Y FALTANTES — ¿Cómo se diferencian un 'bien sobrante' y un 'bien faltante' en el inventario?",
-                hint: "Sobrante = existe físicamente pero no en papel. Faltante = existe en papel pero no está en la oficina.",
+                question: "¿Qué diferencia existe entre un bien sobrante y un bien faltante?",
+                hint: "Sobrante: está físicamente pero no en el registro. Faltante: figura en el registro pero no físicamente.",
                 options: [
                     "El sobrante está en el almacén central y el faltante en custodia del titular de la entidad.",
-                    "El sobrante existe físicamente pero no está en registros; el faltante está registrado pero no se ubica físicamente.",
+                    "El bien sobrante existe físicamente pero no figura en el registro; el faltante está en el registro patrimonial pero no se ubica físicamente.",
                     "El faltante es un bien recibido por donación y el sobrante es un bien comprado mediante licitación.",
                     "El sobrante implica responsabilidad penal directa y el faltante se regulariza con nota de crédito.",
                     "No existen diferencias técnicas, ambos se registran como devaluación directa."
                 ],
                 correct: 1,
-                exp: "Sobrante: bien no registrado pero físicamente presente; Faltante: bien en registro contable pero no ubicado físicamente."
+                exp: "En ambos casos deben realizarse las investigaciones técnico-legales necesarias antes de disponer su regularización o baja."
             },
             {
-                question: "DIRECTIVA DE ALMACENAMIENTO — ¿Qué norma la Directiva N.° 0004-2021-EF/54.01 en el marco del SNA?",
-                hint: "Establece las reglas para la recepción, ingreso, custodia, trazabilidad y distribución de bienes muebles en almacenes.",
+                question: "¿Qué regula la Directiva N.° 0004-2021-EF/54.01 respecto del almacenamiento y distribución?",
+                hint: "Procedimientos de almacenamiento de bienes muebles: trazabilidad, conservación, recepción, custodia, permanencia y distribución.",
                 options: [
                     "Las sanciones aplicables a los comités de selección por retrasos en el otorgamiento de la Buena Pro.",
-                    "Los procedimientos para la recepción, verificación, custodia, trazabilidad y distribución eficiente en almacenes.",
+                    "Regula la gestión de almacenamiento de bienes muebles: trazabilidad, conservación, recepción, registro de ingreso, permanencia y distribución.",
                     "La metodología para la formulación de proyectos de inversión pública en infraestructura vial.",
                     "Los salarios mínimos aplicables a los consultores contratados por los pliegos del Gobierno.",
                     "Los requisitos para la importación directa de maquinaria pesada sin aranceles."
                 ],
                 correct: 1,
-                exp: "Regula el almacenamiento y la distribución de bienes muebles, asegurando trazabilidad, óptima conservación y control físico."
+                exp: "Norma el flujo completo del almacenamiento y despacho físico de bienes para asegurar control, seguridad y conservación."
             }
         ];
 
@@ -795,7 +805,7 @@
 
         // Inicializar y aleatorizar preguntas y alternativas
         function setupRandomizedData() {
-            // 1. Clonar y desordenar el orden de las 40 preguntas
+            // 1. Clonar y desordenar las 40 preguntas del balotario
             const shuffledQuestions = shuffleArray([...rawQuizData]);
 
             // 2. Desordenar las alternativas dentro de cada pregunta
@@ -1001,7 +1011,7 @@
         function restartQuiz() {
             document.getElementById('result-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
-            init(); // Reinicia y genera una nueva combinación aleatoria
+            init();
         }
 
         window.onload = init;
