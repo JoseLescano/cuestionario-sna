@@ -1,939 +1,934 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cuestionario Interactivo - SNA (40 Preguntas)</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <style>
-    .option-btn {
-      transition: all 0.2s ease-in-out;
-    }
-    .option-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-  </style>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
-
-  <!-- Header -->
-  <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50 border-b border-slate-700">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <div class="bg-blue-600 text-white p-2 rounded-lg font-bold text-lg">
-          <i class="fa-solid me-1 fa-boxes-packing"></i> SNA
-        </div>
-        <div>
-          <h1 class="text-base md:text-lg font-bold leading-tight">Sistema Nacional de Abastecimiento</h1>
-          <p class="text-xs text-slate-400">Balotario de Estudio Interactivo (40 Preguntas)</p>
-        </div>
-      </div>
-      <div id="live-stats" class="hidden md:flex gap-4 text-xs font-semibold">
-        <div class="bg-slate-800 px-3 py-1.5 rounded-md border border-slate-700">
-          <span class="text-emerald-400 font-bold" id="stat-correct">0</span> Correctas
-        </div>
-        <div class="bg-slate-800 px-3 py-1.5 rounded-md border border-slate-700">
-          <span class="text-rose-400 font-bold" id="stat-incorrect">0</span> Incorrectas
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="max-w-5xl mx-auto px-4 py-6 flex-1 w-full">
-
-    <!-- Vista de Cuestionario -->
-    <div id="quiz-screen" class="space-y-6">
-
-      <!-- Panel de Progreso -->
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-        <div class="flex justify-between items-center mb-2 text-sm font-semibold text-slate-600">
-          <span id="question-counter">Pregunta 1 de 40</span>
-          <span id="session-tag" class="bg-blue-50 text-blue-700 text-xs px-2.5 py-1 rounded-full border border-blue-200">Sesión 1</span>
-        </div>
-        <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
-          <div id="progress-bar" class="bg-blue-600 h-3 rounded-full transition-all duration-300" style="width: 2.5%"></div>
-        </div>
-      </div>
-
-      <!-- Tarjeta Principal de la Pregunta -->
-      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 transition-all">
-        <h2 id="question-text" class="text-lg md:text-xl font-bold text-slate-800 mb-4 leading-relaxed">
-          Cargando pregunta...
-        </h2>
-
-        <!-- Botón de Ayuda / Pista -->
-        <div class="mb-5">
-          <button id="hint-btn" onclick="toggleHint()" class="inline-flex items-center gap-2 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-2 rounded-lg transition-colors">
-            <i class="fa-solid fa-lightbulb text-amber-500 text-sm"></i>
-            <span>💡 ¿Necesitas ayuda? Ver pista / concepto clave</span>
-          </button>
-          
-          <div id="hint-box" class="hidden mt-3 p-4 bg-amber-50 border-l-4 border-amber-400 text-amber-900 rounded-r-lg text-xs md:text-sm leading-relaxed shadow-inner">
-            <div class="font-bold mb-1 flex items-center gap-1.5 text-amber-800">
-              <i class="fa-solid fa-circle-info"></i> Concepto Clave / Ayuda:
-            </div>
-            <p id="hint-text"></p>
-          </div>
-        </div>
-
-        <!-- Lista de Alternativas -->
-        <div id="options-container" class="space-y-3">
-          <!-- Se insertan dinámicamente -->
-        </div>
-
-        <!-- Caja de Retroalimentación Post-Respuesta -->
-        <div id="feedback-box" class="hidden mt-6 p-4 rounded-xl border text-sm leading-relaxed">
-          <div id="feedback-header" class="font-bold text-base mb-1 flex items-center gap-2"></div>
-          <p id="feedback-text" class="text-slate-700"></p>
-        </div>
-      </div>
-
-      <!-- Navegación Inferior -->
-      <div class="flex justify-between items-center gap-4">
-        <button id="prev-btn" onclick="navigate(-1)" class="px-4 py-2.5 bg-white border border-slate-300 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-          <i class="fa-solid fa-arrow-left me-1"></i> Anterior
-        </button>
-
-        <button id="next-btn" onclick="navigate(1)" class="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20">
-          Siguiente <i class="fa-solid fa-arrow-right ms-1"></i>
-        </button>
-      </div>
-
-      <!-- Grilla Navegadora de 40 Preguntas -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Navegación Rápida de Preguntas</h3>
-        <div id="question-grid" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2 custom-scrollbar">
-          <!-- Botones 1-40 -->
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Pantalla de Resumen Final -->
-    <div id="result-screen" class="hidden bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-center max-w-2xl mx-auto my-8">
-      <div class="inline-flex p-4 bg-blue-50 text-blue-600 rounded-full text-4xl mb-4">
-        <i class="fa-solid fa-trophy"></i>
-      </div>
-      <h2 class="text-2xl font-bold text-slate-800 mb-2">¡Cuestionario Completado!</h2>
-      <p class="text-slate-600 text-sm mb-6">Has completado la revisión de los 40 ítems del Balotario del SNA.</p>
-
-      <div class="grid grid-cols-3 gap-4 mb-6">
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-          <div class="text-2xl font-bold text-slate-800" id="final-total">40</div>
-          <div class="text-xs text-slate-500">Preguntas</div>
-        </div>
-        <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-          <div class="text-2xl font-bold text-emerald-600" id="final-correct">0</div>
-          <div class="text-xs text-emerald-700">Aciertos</div>
-        </div>
-        <div class="p-4 bg-rose-50 rounded-xl border border-rose-200">
-          <div class="text-2xl font-bold text-rose-600" id="final-incorrect">0</div>
-          <div class="text-xs text-rose-700">Errores</div>
-        </div>
-      </div>
-
-      <div class="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-200 text-left">
-        <div class="flex justify-between items-center mb-1">
-          <span class="font-bold text-blue-900">Efectividad Global:</span>
-          <span class="font-bold text-blue-900" id="final-percentage">0%</span>
-        </div>
-        <div class="w-full bg-blue-200 rounded-full h-2">
-          <div id="final-bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
-        </div>
-      </div>
-
-      <button onclick="restartQuiz()" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30">
-        <i class="fa-solid fa-rotate-right me-2"></i> Reiniciar Cuestionario
-      </button>
-    </div>
-
-  </main>
-
-  <script>
-    const quizData = [
-      // SESIÓN 1
-      {
-        id: 1, session: "Sesión 1: Marco General",
-        question: "1. ¿Cuál es la finalidad del Sistema Nacional de Abastecimiento y cómo se vincula con la prestación de servicios públicos?",
-        hint: "El SNA busca asegurar la provisión oportuna de bienes y servicios para alcanzar metas institucionales e impactar en el valor público.",
-        options: [
-          "Maximizar el ahorro fiscal mediante la compra de productos al menor precio posible del mercado.",
-          "Articular los procesos de provisión oportuna y eficiente de bienes, servicios y obras para cumplir metas institucionales y satisfacer necesidades ciudadanas.",
-          "Garantizar la fiscalización y sanción administrativa de los funcionarios involucrados en la contratación.",
-          "Centralizar la totalidad de los almacenes públicos en un único depósito administrado por el MEF.",
-          "Facilitar la privatización de servicios públicos indispensables a través de concesiones a largo plazo."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: El SNA articula los procesos para que las entidades obtengan bienes, servicios y obras con provisión oportuna y eficiente, cumpliendo las metas del Estado."
-      },
-      {
-        id: 2, session: "Sesión 1: Marco General",
-        question: "2. ¿Cuáles son los tres componentes de la Cadena de Abastecimiento Público y qué función cumple cada uno?",
-        hint: "Son las 3 etapas principales: 1) Programación de lo que se necesita, 2) Compra/Adquisición, 3) Gestión integral de los bienes.",
-        options: [
-          "Planeamiento Estratégico, Presupuesto Institucional y Control Contralor.",
-          "Programación Multianual de BSyO, Gestión de Adquisiciones y Administración de Bienes.",
-          "Catalogación, Subasta Inversa y Baja Patrimonial.",
-          "Certificación Presupuestal, Compromiso Anual y Devengado del gasto.",
-          "Indagación de Mercado, Cotización de Proveedores y Firma de Contrato."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Los tres componentes regulados por el D.L. 1439 son: PMBSO, Gestión de Adquisiciones y Administración de Bienes."
-      },
-      {
-        id: 3, session: "Sesión 1: Marco General",
-        question: "3. ¿Qué papel cumple la Dirección General de Abastecimiento (DGA) dentro del Sistema Nacional de Abastecimiento?",
-        hint: "La DGA pertenece al MEF y dicta las directivas y normas generales para todo el sector público.",
-        options: [
-          "Tramitar y aprobar directamente los Expedientes de Contratación de todos los ministerios.",
-          "Ejercer la rectoría técnico-normativa del sistema, emitiendo disposiciones para ordenar la gestión y promover la aplicación articulada de sus componentes.",
-          "Resolver en última instancia administrativa las apelaciones e impugnaciones de licitaciones públicas.",
-          "Auditar las cuentas bancarias de los contratistas del Estado.",
-          "Administrar el catálogo de proveedores sancionados e inhabilitados para contratar con el Estado."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La DGA del MEF es la máxima autoridad técnico-normativa y ente rector del Sistema Nacional de Abastecimiento."
-      },
-      {
-        id: 4, session: "Sesión 1: Marco General",
-        question: "4. ¿Por qué la gestión de abastecimiento no termina con la contratación de un bien o servicio?",
-        hint: "Comprar el producto es solo el inicio; luego hay que almacenarlo, mantenerlo, asignarlo y disponer de él al final de su vida útil.",
-        options: [
-          "Porque el pago al proveedor debe ejecutarse obligatoriamente después de dos años de uso.",
-          "Porque la contratación solo obtiene la prestación, pero la gestión abarca todo el ciclo de vida: almacenamiento, distribución, mantenimiento, custodia y disposición final.",
-          "Debido a que las garantías comerciales expiran automáticamente al momento de la entrega del producto.",
-          "Porque los contratos estatales tienen vigencia indefinida según la Ley N.º 32069.",
-          "Porque el proveedor debe formar parte de la plantilla de trabajadores de la entidad contratante."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La gestión de abastecimiento incluye la Administración de Bienes durante todo su ciclo de vida."
-      },
-      {
-        id: 5, session: "Sesión 1: Marco General",
-        question: "5. ¿Por qué es importante la trazabilidad en la Cadena de Abastecimiento Público?",
-        hint: "La trazabilidad permite seguir la pista histórica a cada recurso desde que se programa hasta su destino final.",
-        options: [
-          "Garantizar que todos los bienes importados ingresen al país libre de impuestos aduaneros.",
-          "Permite reconstruir las actuaciones y conocer el estado de los recursos en cada etapa, facilitando el control, la rendición de cuentas y la detección de desviaciones.",
-          "Obliga a las entidades a contratar únicamente con proveedores locales o regionales.",
-          "Evita que se realicen modificaciones o adendas a los contratos vigentes.",
-          "Automatiza la emisión de facturas electrónicas en el sistema SUNAT."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Permite conocer el historial completo de cada recurso, garantizando transparencia y detección de irregularidades."
-      },
-      {
-        id: 6, session: "Sesión 1: Marco General",
-        question: "6. ¿Qué significa gestionar los bienes bajo un enfoque de ciclo de vida?",
-        hint: "Implica cuidar el bien en todas sus fases: alta, custodia, mantenimiento, inventario hasta la baja o disposición final.",
-        options: [
-          "Adquirir únicamente bienes que tengan una vida útil estimada mayor a 20 años.",
-          "Planificar integralmente la incorporación, registro, custodia, mantenimiento, aseguramiento y destino final del bien para conservar su utilidad institucional.",
-          "Reemplazar todos los bienes muebles de la entidad cada inicio de año fiscal.",
-          "Comprar bienes de segundo uso para reducir los costos de mantenimiento preventivo.",
-          "Transferir la propiedad de los vehículos institucionales a los funcionarios al término de su gestión."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: El enfoque de ciclo de vida asegura conservar la utilidad del bien y optimizar los recursos del Estado."
-      },
-
-      // SESIÓN 2
-      {
-        id: 7, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "7. ¿Qué es la Programación Multianual de Bienes, Servicios y Obras (PMBSO) y cuál es su finalidad?",
-        hint: "Es una planificación a mediano plazo que proyecta las compras de la entidad por un periodo continuo de mínimo 3 años.",
-        options: [
-          "Un trámite trimestral de regularización presupuestal ante la Dirección General del Tesoro Público.",
-          "El proceso de identificar, clasificar, priorizar y consolidar necesidades para un horizonte mínimo de 3 años, vinculándolas con la disponibilidad de recursos.",
-          "Un catálogo cerrado de proveedores habilitados para venderle al Estado peruano.",
-          "La fase final de liquidación de obras públicas contratadas mediante modalidad de concurso oferta.",
-          "Un registro de bienes obsoletos que deben destruirse en el almacén central."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La PMBSO proyecta las necesidades por 3 años fiscales seguidos para articularlas con la APM y el presupuesto."
-      },
-      {
-        id: 8, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "8. ¿Qué es el Cuadro Multianual de Necesidades (CMN) y qué información organiza?",
-        hint: "Es el instrumento normativo principal que recoge y consolida todas las solicitudes de compras de las áreas usuarias.",
-        options: [
-          "El documento presupuestario emitido por la Contraloría General de la República para autorizar compras.",
-          "El instrumento que consolida, ordena y prioriza las necesidades de bienes, servicios y obras de la entidad para el periodo de programación multianual.",
-          "La lista de contratos resueltos por incumplimiento de proveedores en el año fiscal anterior.",
-          "El reporte financiero consolidado de pagos pendientes de la Oficina de Tesorería.",
-          "La planilla general de pagos del personal bajo el régimen Decreto Legislativo 276."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: El CMN organiza y prioriza todas las necesidades institucionales para el periodo programado."
-      },
-      {
-        id: 9, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "9. ¿Qué relación existe entre el pronóstico de demanda y la identificación de necesidades?",
-        hint: "Anticipa el consumo futuro basándose en datos históricos para no pedir compras de 'último minuto' o sin sustento.",
-        options: [
-          "El pronóstico de demanda reemplaza la necesidad de contar con un Presupuesto Institucional de Apertura.",
-          "Anticipa los requerimientos futuros con base en información histórica y proyectada, evitando programaciones basadas en urgencias o pedidos aislados.",
-          "Determina de manera automática e irrevocable qué proveedor ganará la buena pro.",
-          "Permite omitir la fase de priorización en la formulación del Cuadro Multianual de Necesidades.",
-          "Ajusta el precio de los bienes importados en función de la inflación internacional."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Proporciona bases objetivas y estadísticas para prever la demanda real de suministros y servicios."
-      },
-      {
-        id: 10, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "10. ¿Cuáles son las fases de la PMBSO y qué se realiza en cada una?",
-        hint: "Inicia identificando lo que se requiere, luego ordenando por importancia y finalmente aprobando el documento consolidado.",
-        options: [
-          "Convocatoria, Evaluación de Ofertas y Otorgamiento de Buena Pro.",
-          "Identificación, Clasificación y Priorización, y Consolidación y Aprobación.",
-          "Solicitud de Cotización, Cuadro Comparativo y Orden de Compra.",
-          "Alta Patrimonial, Registro Físico y Distribución en Almacén.",
-          "Previsión Presupuestal, Certificación del Gasto y Pago en Cta. Cte."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Las 3 fases normadas son Identificación, Clasificación y Priorización, y Consolidación y Aprobación."
-      },
-      {
-        id: 11, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "11. ¿Qué se busca con la fase de identificación?",
-        hint: "Es la primera etapa donde las áreas usuarias señalan qué insumos requieren para cumplir con su Plan Operativo (POI).",
-        options: [
-          "Seleccionar las empresas que participarán en los procesos de licitación pública.",
-          "Reconocer las necesidades de BSyO vinculadas con las actividades y metas de la entidad, partiendo de información sustentada de las áreas usuarias.",
-          "Determinar el valor de penalidad que se aplicará a los contratos en ejecución.",
-          "Reducir el presupuesto asignado a la entidad para el siguiente año fiscal.",
-          "Aprobar los manuales de organización y funciones de la Oficina de Abastecimiento."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La Fase de Identificación reconoce formalmente los requerimientos técnicos para alcanzar los objetivos."
-      },
-      {
-        id: 12, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "12. ¿Por qué la PMBSO requiere trabajo colaborativo entre las áreas de la entidad?",
-        hint: "Se necesita unir el requerimiento del usuario, la gestión de logística y el techo financiero que da presupuesto.",
-        options: [
-          "Porque el Ministerio de Economía y Finanzas exige firmas manuscritas de todos los trabajadores.",
-          "Debido a que exige integrar el conocimiento operativo (Área Usuaria), la gestión logística (Abastecimiento) y la disponibilidad de recursos (Presupuesto).",
-          "Para evitar el uso de sistemas informáticos automatizados como el SIGA-MEF.",
-          "Porque la responsabilidad penal en caso de desabastecimiento es compartida por toda la entidad.",
-          "Para poder aprobar modificaciones al Plan Operativo Institucional sin informe técnico."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Es el trinomio clave (Área Usuaria + Abastecimiento + Presupuesto) indispensable para una buena programación."
-      },
-      {
-        id: 13, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "13. ¿Qué es la Asignación Presupuestaria Multianual (APM) y cómo incide en la programación?",
-        hint: "Es el límite máximo o 'techo' de dinero informado por el MEF para proyectar gastos a 3 años.",
-        options: [
-          "La transferencia bancaria directa que realiza la SUNAT a los proveedores del Estado.",
-          "El límite máximo de recursos presupuestarios estimado por el MEF a un pliego por 3 años, sirviendo de techo marco para programar necesidades.",
-          "El monto reservado exclusivamente para la contratación de consultorías externas.",
-          "El fondo de caja chica utilizado para compras menores e imprevistas de la entidad.",
-          "La suma de todas las penalidades cobradas a empresas contratistas durante el año."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La APM actúa como el marco financiero restrictivo al cual debe ajustarse el CMN."
-      },
-      {
-        id: 14, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "14. ¿Qué consecuencias puede generar una programación deficiente de necesidades?",
-        hint: "Comprar sin planificar provoca compras de pánico, desabastecimiento de hospitales/escuelas o productos pudriéndose en almacén.",
-        options: [
-          "Incremento automático e inmediato en las remuneraciones del personal logístico.",
-          "Requerimientos tardíos, compras de urgencia, duplicidad, existencias innecesarias o desabastecimiento que impiden el logro de metas institucionales.",
-          "La anulación automática de la personería jurídica de la entidad pública.",
-          "Exoneración de presentar estados financieros a la Contraloría General de la República.",
-          "Aumento del valor total de la Asignación Presupuestaria Multianual enviada por el MEF."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Genera ineficiencia, sobrecostos por compras de urgencia y paralización de servicios públicos."
-      },
-      {
-        id: 15, session: "Sesión 2: Programación Multianual (PMBSO)",
-        question: "15. ¿Cómo se conecta la PMBSO con las actuaciones preparatorias de una contratación?",
-        hint: "Lo que se planifica en el CMN es la base de donde se extraen las especificaciones para iniciar el expediente de compra.",
-        options: [
-          "Permite saltarse la etapa de indagación de mercado y adjudicar directo al proveedor tradicional.",
-          "Proporciona la información precisa sobre qué se necesita y cuándo, sirviendo de insumo base para la segmentación, el requerimiento y la estrategia de compra.",
-          "Reemplaza formalmente a las Bases Integradas dentro del procedimiento de selección.",
-          "Modifica los plazos legales previstos para la presentación de recursos de apelación.",
-          "Otorga valor probatorio de escritura pública a las órdenes de compra emitidas."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La PMBSO sirve de punto de partida para armar el requerimiento y la estrategia en actuaciones preparatorias."
-      },
-
-      // SESIÓN 3
-      {
-        id: 16, session: "Sesión 3: Actuaciones Preparatorias",
-        question: "16. ¿Cuál es el propósito de las actuaciones preparatorias dentro del proceso de contratación?",
-        hint: "Es la etapa interna donde se define bien la compra, se aprueba el expediente y se elaboran las bases antes de convocar.",
-        options: [
-          "Ejecutar el desembolso económico a favor del postor ganador de la buena pro.",
-          "Definir la necesidad y organizar de manera informada las decisiones previas a la selección: requerimiento, segmentación, estrategia y expediente de contratación.",
-          "Realizar la auditoría a posteriori de los bienes que ya han sido consumidos por el usuario.",
-          "Dictar sentencia sobre los diferendos judiciales entre contratistas y el Estado.",
-          "Suscribir las actas de recepción de obras públicas de infraestructura vial."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Prepara todo el camino previo a la convocatoria para evitar errores durante el proceso de selección."
-      },
-      {
-        id: 17, session: "Sesión 3: Actuaciones Preparatorias",
-        question: "17. ¿Qué es la segmentación de contrataciones y para qué se utiliza?",
-        hint: "Consiste en agrupar o clasificar las compras según su riesgo y monto (Estratégicos, Críticos, Operacionales, Rutinarios).",
-        options: [
-          "Dividir una compra grande en compras pequeñas para evitar llamar a Licitación Pública.",
-          "Clasificar las contrataciones en categorías según su cuantía y riesgo para optimizar recursos, gestionar riesgos y lograr el mayor valor por el dinero.",
-          "Separar las facturas comerciales según el mes de emisión de cada proveedor.",
-          "Asignar códigos de identificación patrimonial a los vehículos institucionales.",
-          "Filtrar los postores registrados en el RNP por su volumen de ventas brutas."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Permite priorizar la gestión de riesgos y diseñar la estrategia idónea según la complejidad del bien/servicio."
-      },
-      {
-        id: 18, session: "Sesión 3: Actuaciones Preparatorias",
-        question: "18. ¿Por qué el requerimiento debe ser claro, objetivo y responder a la necesidad institucional?",
-        hint: "Si las especificaciones técnicas son confusas o dirigidas a una sola marca, el proceso fracasa o genera reclamos.",
-        options: [
-          "Para garantizar que un único fabricante específico sea el único calificado para cotizar.",
-          "Porque constituye la base de la contratación; de ser ambiguo o sesgado, generará ofertas inadecuadas, sobrecostos o insatisfacción del interés público.",
-          "Para evitar que proveedores extranjeros participen en los procesos de compra estatal.",
-          "Porque la Ley prohíbe realizar modificaciones o adendas a los requerimientos originales.",
-          "Para que el área de presupuesto pueda redactar los términos de referencia sin consultar al área técnica."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Un requerimiento objetivo garantiza la libre concurrencia y asegura que se satisfaga el interés público."
-      },
-      {
-        id: 19, session: "Sesión 3: Actuaciones Preparatorias",
-        question: "19. ¿Qué es la estrategia de contratación y qué decisiones orienta?",
-        hint: "Es el plan integral que decide la modalidad, formas de pago y mitigación de riesgos para obtener 'Valor por Dinero'.",
-        options: [
-          "Un plan de marketing utilizado por las empresas privadas para venderle al Estado.",
-          "El marco de decisiones que evalúa mercado, riesgos, oportunidad y modalidades para estructurar el proceso y obtener el máximo valor por el dinero.",
-          "La solicitud formal de presupuesto adicional remitida al Congreso de la República.",
-          "La estrategia de defensa jurídica empleada ante el Tribunal del OECE.",
-          "El cronograma de vacaciones de los especialistas del Órgano Encargado de las Contrataciones."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La estrategia organiza las decisiones para minimizar riesgos y lograr eficiencia en la contratación."
-      },
-      {
-        id: 20, session: "Sesión 3: Actuaciones Preparatorias",
-        question: "20. ¿Cuál es la finalidad de la interacción con el mercado?",
-        hint: "Incluye la indagación y consulta al mercado para saber si lo que pide el área usuaria existe, cuánto cuesta y quién lo ofrece.",
-        options: [
-          "Acordar de manera confidencial el precio final de la adjudicación con un proveedor preferido.",
-          "Recopilar información objetiva del mercado para validar el requerimiento, conocer la oferta disponible y optimizar las condiciones de contratación.",
-          "Otorgar la Buena Pro de manera anticipada antes de publicar las bases de la licitación.",
-          "Publicar los estados financieros del proveedor en el Diario Oficial El Peruano.",
-          "Inspeccionar las instalaciones administrativas de todos los postores inscritos en el RNP."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Permite ajustar el requerimiento a la realidad comercial antes de convocar el procedimiento."
-      },
-      {
-        id: 21, session: "Sesión 3: Actuaciones Preparatorias",
-        question: "21. ¿Qué diferencia existe entre la definición de la necesidad y la elaboración del requerimiento?",
-        hint: "La necesidad es 'lo que falta o el problema', mientras que el requerimiento es el 'documento técnico formal' (TDR/ET).",
-        options: [
-          "No existe diferencia alguna; ambos términos son legalmente idénticos en la Ley de Contrataciones.",
-          "La necesidad identifica el problema o resultado público a atender; el requerimiento la traduce en especificaciones técnicas, condiciones y requisitos concretos.",
-          "La necesidad es definida por el proveedor y el requerimiento es redactado por el Órgano de Control Institucional.",
-          "El requerimiento se elabora en la fase de ejecución contractual y la necesidad en el presupuesto inicial.",
-          "La definición de la necesidad es un acto contable y el requerimiento es un documento fiscal."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La necesidad expresa el problema a resolver; el requerimiento formaliza los detalles técnicos y contractuales."
-      },
-      {
-        id: 22, session: "Sesión 3: Actuaciones Preparatorias",
-        question: "22. ¿Qué función cumple el expediente de contratación en esta etapa?",
-        hint: "Es la carpeta técnica y legal que reúne todo el historial ordenado de las actuaciones antes de salir a convocar.",
-        options: [
-          "Autorizar la cancelación de las órdenes de compra emitidas en años anteriores.",
-          "Compilar y respaldar documentalmente todas las actuaciones y decisiones que sustentan la legalidad, disponibilidad y viabilidad del proceso.",
-          "Servir como comprobante de pago electrónico frente a la Superintendencia Nacional de Aduanas.",
-          "Registrar la propiedad de los inmuebles estatales en la Superintendencia de los Registros Públicos (SUNARP).",
-          "Publicar las hojas de vida de los evaluadores que integran el comité de selección."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: El expediente reúne el sustento técnico, presupuestal y legal necesario para autorizar la compra."
-      },
-      {
-        id: 23, session: "Sesión 3: Actuaciones Preparatorias",
-        question: "23. ¿Qué importancia tiene la designación de evaluadores antes de la selección?",
-        hint: "Identifica formalmente a los profesionales que evaluarán las propuestas con imparcialidad y responsabilidad.",
-        options: [
-          "Eximir de toda responsabilidad administrativa al titular de la Entidad.",
-          "Garantizar que la conducción del proceso y la evaluación de ofertas estén a cargo de personas idóneas, competentes y legalmente responsables.",
-          "Asegurar que el postor con la cotización más alta resulte seleccionado.",
-          "Transferir la competencia de evaluación a la Contraloría General de la República.",
-          "Reemplazar la necesidad de publicar las bases en el Sistema Electrónico de Contrataciones del Estado."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Los evaluadores conducen el proceso garantizando objetividad, transparencia y legalidad."
-      },
-
-      // SESIÓN 4
-      {
-        id: 24, session: "Sesión 4: Fase de Selección",
-        question: "24. ¿Qué es un procedimiento de selección y cuál es su finalidad?",
-        hint: "Es el camino administrativo público donde compiten los proveedores para elegir a la mejor propuesta.",
-        options: [
-          "Un juicio oral tramitado ante el Poder Judicial para sancionar faltas contractuales.",
-          "Un procedimiento administrativo compuesto por actos de gestión cuyo objetivo es evaluar ofertas para seleccionar la propuesta más conveniente y perfeccionar el contrato.",
-          "Una auditoría financiera realizada por una sociedad de auditoría externa e independiente.",
-          "El acto mediante el cual la entidad pública liquida sus deudas laborales con el personal CAS.",
-          "Una reunión informativa sin valor legal entre la entidad y las empresas del sector logístico."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Su finalidad es escoger la oferta de mayor calidad/precio y formalizar la relación jurídica."
-      },
-      {
-        id: 25, session: "Sesión 4: Fase de Selección",
-        question: "25. ¿Qué diferencia existe entre un procedimiento competitivo y uno no competitivo?",
-        hint: "El competitivo invita libremente a varios postores; el no competitivo aplica excepcionalmente a supuestos como proveedor único.",
-        options: [
-          "El competitivo se realiza sin presupuesto y el no competitivo requiere certificación del gasto aprobada.",
-          "El competitivo convoca al mercado para comparar propuestas bajo igualdad de trato; el no competitivo procede solo bajo supuestos legales específicos (ej. desabastecimiento o proveedor único).",
-          "El no competitivo permite contratar a precios superiores a los del mercado sin fiscalización posterior.",
-          "El competitivo aplica exclusivamente para obras y el no competitivo para la compra de pasajes aéreos.",
-          "No existen procedimientos no competitivos dentro del marco normativo del SNA."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: La libre competencia es la regla general; la contratación directa/no competitiva es la excepción legal."
-      },
-      {
-        id: 26, session: "Sesión 4: Fase de Selección",
-        question: "26. ¿Cuáles son las principales etapas de un procedimiento competitivo?",
-        hint: "Inicia con la convocatoria, pasa por consultas/observaciones, evaluación de propuestas hasta dar la Buena Pro.",
-        options: [
-          "Formulación del CMN, Asignación Presupuestal y Emisión de la Orden de Compra.",
-          "Convocatoria, cuestionamientos a bases, integración de bases, evaluación de ofertas, otorgamiento de Buena Pro y resolución de controversias.",
-          "Alta Patrimonial, Inventario Físico, Mantenimiento Preventivo y Disposición Final.",
-          "Solicitud de Pedido, Cotización, Conformidad y Emisión de Comprobante de Pago.",
-          "Negociación directa, Adjudicación, Firma de adenda e Inspección de almacén."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Es la secuencia cronológica establecida por la ley para seleccionar transparentemente al contratista."
-      },
-      {
-        id: 27, session: "Sesión 4: Fase de Selección",
-        question: "27. ¿Qué función cumplen las bases integradas dentro del procedimiento?",
-        hint: "Son las reglas definitivas del juego que ya no pueden cambiarse tras absolver todas las consultas u observaciones.",
-        options: [
-          "Reemplazar al contrato firmado en caso de que el contratista decida no suscribirlo.",
-          "Establecer las reglas definitivas del procedimiento tras absolver consultas y observaciones, siendo de obligatorio cumplimiento para participantes y la entidad.",
-          "Inhabilitar automáticamente a todos los participantes que formularon observaciones.",
-          "Modificar de forma unilateral el monto tope del presupuesto institucional asignado.",
-          "Otorgar de manera inmediata la conformidad técnica a los bienes entregados por el proveedor."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Las bases integradas constituyen la norma definitiva e inalterable que rige la evaluación de propuestas."
-      },
-      {
-        id: 28, session: "Sesión 4: Fase de Selección",
-        question: "28. ¿Qué función cumple la etapa de cuestionamiento a las bases?",
-        hint: "Permite a los participantes realizar consultas (dudas) u observaciones (reclamos por incumplimiento de normas).",
-        options: [
-          "Permitir que los competidores reduzcan el monto de su propuesta económica de manera confidencial.",
-          "Ofrecer un espacio legal para que los participantes soliciten aclaraciones o adviertan vulneraciones a la norma, corrigiendo las bases antes de su integración.",
-          "Suspender de forma indefinida todos los procedimientos de contratación de la entidad.",
-          "Reemplazar al comité de selección por un árbitro único designado por la OSCE.",
-          "Exigir que los postores paguen una tasa administrativa no reembolsable a la entidad."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Permite depurar errores y aclarar cláusulas ambiguas antes de fijar las bases integradas."
-      },
-      {
-        id: 29, session: "Sesión 4: Fase de Selección",
-        question: "29. ¿Qué debe considerar la entidad para elegir el procedimiento de selección aplicable?",
-        hint: "La elección depende del objeto (bien, servicio u obra), la cuantía financiera y la complejidad técnica, no del capricho personal.",
-        options: [
-          "Únicamente la rapidez del procedimiento y la preferencia personal del jefe de logística.",
-          "El objeto de contratación, la cuantía, la complejidad, las condiciones del mercado y los supuestos configurados en la Ley y el Reglamento.",
-          "La ubicación geográfica de la sede central del proveedor participante.",
-          "El nivel de amistad o confianza existente entre los postores y los evaluadores.",
-          "La cantidad de hojas impresas que contenga el expediente de contratación."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Los criterios legales de cuantía, objeto y mercado determinan qué tipo de licitación o concurso corresponde."
-      },
-
-      // SESIÓN 5
-      {
-        id: 30, session: "Sesión 5: Ejecución Contractual",
-        question: "30. ¿Qué es el contrato público en el marco de la contratación estatal?",
-        hint: "Es el acuerdo vinculante respaldado por ley entre la entidad del Estado y el proveedor adjudicado.",
-        options: [
-          "Un acuerdo privado libre de regulación estatal regido únicamente por el Código Civil.",
-          "El acuerdo normado que crea, regula, modifica o extingue una relación jurídica entre la Entidad y el contratista para la ejecución de prestaciones públicas.",
-          "Una promesa verbal de pago emitida por el Órgano Encargado de las Contrataciones.",
-          "Un certificado de depósito emitido por una entidad bancaria a favor del MEF.",
-          "Un decreto supremo firmado por el Presidente de la República."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Regula los derechos y deberes mutuos para la entrega de bienes, servicios u obras públicas."
-      },
-      {
-        id: 31, session: "Sesión 5: Ejecución Contractual",
-        question: "31. ¿Por qué el contrato debe registrarse en el SEACE dentro de los 10 días hábiles?",
-        hint: "El registro en el portal público asegura que cualquier ciudadano u órgano de control pueda fiscalizar la compra.",
-        options: [
-          "Para que la SUNAT aplique la retención del impuesto a la renta en tiempo real.",
-          "Garantizar la publicidad, transparencia y trazabilidad de la gestión contractual ante la ciudadanía y los órganos de control.",
-          "Evitar que otras entidades públicas puedan contratar con el mismo proveedor.",
-          "Obtener el visto bueno de los organismos internacionales de crédito financiero.",
-          "Transferir la responsabilidad técnica de la ejecución al Administrador del SEACE."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Es una obligación legal para respaldar el principio de transparencia y control público."
-      },
-      {
-        id: 32, session: "Sesión 5: Ejecución Contractual",
-        question: "32. ¿Qué se entiende por ejecución contractual?",
-        hint: "Es el periodo de 'manos a la obra' donde el proveedor entrega el producto y la entidad verifica y paga.",
-        options: [
-          "La etapa preparatoria donde se aprueba el presupuesto institucional de apertura.",
-          "La etapa en la que ambas partes cumplen las obligaciones y prestaciones pactadas, abarcando el seguimiento, conformidad, pagos y eventuales modificaciones.",
-          "El proceso sancionador dictado contra las empresas que no participan en los procesos.",
-          "La fase de remate público de los bienes dados de baja en el almacén central.",
-          "La elaboración de las especificaciones técnicas por parte del área usuaria."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Comprende el cumplimiento de las prestaciones desde la suscripción hasta la liquidación o conformidad final."
-      },
-      {
-        id: 33, session: "Sesión 5: Ejecución Contractual",
-        question: "33. ¿En qué consiste la modificación contractual y cuál es su límite esencial?",
-        hint: "Se pueden hacer ajustes para cumplir la finalidad del contrato, pero sin desnaturalizar el objeto ni romper la equivalencia financiera.",
-        options: [
-          "Permitir al contratista cambiar el objeto del contrato por uno totalmente distinto según su conveniencia.",
-          "Reajustar las condiciones contractuales para cumplir la finalidad pública, sin alterar el equilibrio económico-financiero ni la esencia del contrato.",
-          "Duplicar el precio del contrato sin requerir sustento técnico o presupuestal alguno.",
-          "Cambiar la identidad del contratista ganador por una empresa subcontratada sin autorización.",
-          "Extender los plazos de entrega sin aplicar las penalidades estipuladas en el reglamento."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Se permiten modificaciones necesarias siempre que mantengan la finalidad y el equilibrio de las partes."
-      },
-      {
-        id: 34, session: "Sesión 5: Ejecución Contractual",
-        question: "34. ¿Qué significa preservar el equilibrio económico-financiero del contrato?",
-        hint: "Ninguna de las dos partes debe verse perjudicada o enriquecida de forma injusta por cambios sobrevenidos en el contrato.",
-        options: [
-          "Garantizar que el contratista obtenga utilidades netas superiores al 50% del valor total.",
-          "Mantener la equivalencia entre prestaciones y contraprestaciones pactada originalmente, evitando traslados injustificados de cargas económicas entre las partes.",
-          "Eximir a la Entidad de la obligación de pagar los adicionales de obra aprobados.",
-          "Fijar un tipo de cambio dólar congelado para todas las contrataciones internacionales.",
-          "Permitir al proveedor cobrar intereses moratorios antes del vencimiento de la obligación."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Mantiene el balance original entre lo que el contratista invierte/entrega y lo que la entidad paga."
-      },
-      {
-        id: 35, session: "Sesión 5: Ejecución Contractual",
-        question: "35. ¿Qué función cumple la verificación del cumplimiento de obligaciones?",
-        hint: "Es la constatación técnica antes de firmar el acta de conformidad y girar la orden de pago.",
-        options: [
-          "Validar que el proveedor haya pagado sus tributos ante la municipalidad de su jurisdicción.",
-          "Comprobar técnicamente que las prestaciones se ejecutaron conforme a lo estipulado, sirviendo de requisito indispensable para otorgar la conformidad y tramitar el pago.",
-          "Sustituir la inspección física del bien por una declaración jurada simple del contratista.",
-          "Determinar el incremento de la remuneración mensual del personal encargado del almacén.",
-          "Cancelar la inscripción del postor en el Registro Nacional de Proveedores."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Garantiza que el Estado reciba exactamente lo contratado con la calidad exigida antes de pagar."
-      },
-
-      // SESIÓN 6
-      {
-        id: 36, session: "Sesión 6: Administración de Bienes",
-        question: "36. ¿Qué comprende la Administración de Bienes dentro de la Cadena de Abastecimiento Público?",
-        hint: "Se encarga del almacenamiento, distribución, inventario, mantenimiento y disposición final de los activos.",
-        options: [
-          "La compra exclusiva de papelería y útiles de oficina para las sedes administrativas.",
-          "La gestión integral de bienes muebles e inmuebles: recepción, registro, asignación, custodia, conservación, mantenimiento y destino final o baja patrimonial.",
-          "La formulación de los términos de referencia para la contratación de consultores individuales.",
-          "La contratación de seguros de salud para el personal directivo del Estado.",
-          "El cobro de arbitrios municipales a los ciudadanos que ocupan la vía pública."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Es el tercer componente del SNA orientado a cuidar y administrar los bienes muebles e inmuebles."
-      },
-      {
-        id: 37, session: "Sesión 6: Administración de Bienes",
-        question: "37. ¿Qué diferencia existe entre alta patrimonial y adquisición de un bien?",
-        hint: "Adquisición es la forma de conseguirlo (comprado o donado); el Alta es el registro administrativo-contable en los libros de la entidad.",
-        options: [
-          "Son términos idénticos que significan exactamente lo mismo dentro de la contabilidad gubernamental.",
-          "La adquisición es la modalidad de obtención del bien (ej. compra o donación); el alta es el acto administrativo que lo ingresa formalmente al registro patrimonial.",
-          "El alta patrimonial la realiza el proveedor y la adquisición la aprueba la SUNAT.",
-          "La adquisición se refiere únicamente a bienes inmuebles y el alta a bienes intangibles.",
-          "El alta patrimonial destruye el bien y la adquisición lo mantiene en custodia."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Adquirir es la transacción u obtención; el alta es la incorporación oficial en el patrimonio estatal."
-      },
-      {
-        id: 38, session: "Sesión 6: Administración de Bienes",
-        question: "38. ¿Cuál es la finalidad del inventario físico de bienes muebles?",
-        hint: "Servir para 'contar uno a uno' los escritorios, computadoras y vehículos para cruzarlos con la contabilidad.",
-        options: [
-          "Vender en subasta pública todos los bienes que tengan más de dos años de uso.",
-          "Verificar la presencia física, estado y ubicación de los bienes, conciliando los registros patrimoniales con los contables para identificar inconsistencias.",
-          "Sancionar inmediatamente con destitución a los encargados del almacenamiento.",
-          "Determinar el monto exacto del presupuesto del año fiscal siguiente.",
-          "Duplicar el valor comercial de los activos fijos registrados en la contabilidad."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Constata físicamente la existencia real de los bienes y detecta faltantes o sobrantes."
-      },
-      {
-        id: 39, session: "Sesión 6: Administración de Bienes",
-        question: "39. ¿Qué diferencia existe entre un bien sobrante y un bien faltante?",
-        hint: "Sobrante = está físicamente en la oficina pero no en el libro. Faltante = está en el libro pero desapareció de la oficina.",
-        options: [
-          "El sobrante se ubica en el almacén central y el faltante está en poder del titular de la entidad.",
-          "El sobrante existe físicamente pero no está registrado; el faltante está registrado pero no se ubica físicamente. Ambos exigen investigación administrativa.",
-          "El faltante es un bien donado y el sobrante es un bien comprado mediante subasta.",
-          "El sobrante genera responsabilidad penal inmediata y el faltante se regulariza con una nota de crédito.",
-          "No existe diferencia técnica, ambos se registran en la cuenta de depreciación acumulada."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Sobrante es exceso no registrado; faltante es pérdida o extravío de un bien registrado."
-      },
-      {
-        id: 40, session: "Sesión 6: Administración de Bienes",
-        question: "40. ¿Qué regula la Directiva N.° 0004-2021-EF/54.01 respecto del almacenamiento y distribución?",
-        hint: "Es la norma marco emitida por la DGA para controlar los almacenes, las entradas, salidas y la entrega a los usuarios.",
-        options: [
-          "Las sanciones disciplinarias aplicables a los comités de selección por demoras en la adjudicación.",
-          "Los procedimientos para la recepción, verificación, registro, custodia, trazabilidad, conservación y distribución eficiente de bienes muebles en los almacenes.",
-          "La metodología de valoración técnica de proyectos de infraestructura vial multinacional.",
-          "La escala salarial aplicable a los inspectores de obras públicas contratados por el Estado.",
-          "Los requisitos legales para la adquisición de software sin licencia en entidades regionales."
-        ],
-        correct: 1,
-        explanation: "Respuesta correcta B: Dicta las reglas obligatorias para la gestión física de almacenes y despacho seguro de suministros."
-      }
-    ];
-
-    let currentIndex = 0;
-    let userAnswers = new Array(quizData.length).fill(null);
-
-    // Inicializar la interfaz
-    function initQuiz() {
-      renderGrid();
-      loadQuestion();
-      updateStats();
-    }
-
-    // Renderizar Grilla de Navegación 1-40
-    function renderGrid() {
-      const grid = document.getElementById('question-grid');
-      grid.innerHTML = '';
-      quizData.forEach((q, idx) => {
-        const btn = document.createElement('button');
-        btn.id = `grid-btn-${idx}`;
-        btn.innerText = idx + 1;
-        btn.onclick = () => jumpToQuestion(idx);
-        btn.className = `h-9 text-xs font-bold rounded-lg border transition-all flex items-center justify-center ${getGridClass(idx)}`;
-        grid.appendChild(btn);
-      });
-    }
-
-    function getGridClass(idx) {
-      if (idx === currentIndex) {
-        return 'border-blue-600 bg-blue-600 text-white font-extrabold ring-2 ring-blue-300';
-      }
-      if (userAnswers[idx] === null) {
-        return 'border-slate-200 bg-slate-100 text-slate-600 hover:bg-slate-200';
-      }
-      if (userAnswers[idx] === quizData[idx].correct) {
-        return 'border-emerald-500 bg-emerald-500 text-white';
-      }
-      return 'border-rose-500 bg-rose-500 text-white';
-    }
-
-    // Cargar Pregunta Actual
-    function loadQuestion() {
-      const q = quizData[currentIndex];
-      
-      // Textos y etiquetas
-      document.getElementById('question-counter').innerText = `Pregunta ${currentIndex + 1} de ${quizData.length}`;
-      document.getElementById('session-tag').innerText = q.session;
-      document.getElementById('question-text').innerText = q.question;
-      
-      // Ocultar Pista al cambiar de pregunta
-      document.getElementById('hint-box').classList.add('hidden');
-      document.getElementById('hint-text').innerText = q.hint;
-
-      // Barra de progreso
-      const progressPercent = ((currentIndex + 1) / quizData.length) * 100;
-      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
-
-      // Renderizar Opciones (A, B, C, D, E)
-      const container = document.getElementById('options-container');
-      container.innerHTML = '';
-
-      const letters = ['A', 'B', 'C', 'D', 'E'];
-      const isAnswered = userAnswers[currentIndex] !== null;
-
-      q.options.forEach((opt, optIdx) => {
-        const btn = document.createElement('button');
-        btn.disabled = isAnswered;
-        btn.onclick = () => selectOption(optIdx);
-        btn.className = `option-btn w-full p-4 rounded-xl border text-left text-sm md:text-base font-medium flex items-start gap-3 ${getOptionStyle(optIdx)}`;
-
-        btn.innerHTML = `
-          <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold shrink-0 ${getLetterStyle(optIdx)}">
-            ${letters[optIdx]}
-          </span>
-          <span class="mt-0.5 leading-snug">${opt}</span>
-        `;
-        container.appendChild(btn);
-      });
-
-      // Mostrar/Ocultar Retroalimentación
-      const feedbackBox = document.getElementById('feedback-box');
-      if (isAnswered) {
-        const isCorrect = userAnswers[currentIndex] === q.correct;
-        feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'bg-rose-50', 'border-rose-200');
-        
-        if (isCorrect) {
-          feedbackBox.classList.add('bg-emerald-50', 'border-emerald-200');
-          document.getElementById('feedback-header').className = 'font-bold text-emerald-800 text-base mb-1 flex items-center gap-2';
-          document.getElementById('feedback-header').innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> ¡Respuesta Correcta!`;
-        } else {
-          feedbackBox.classList.add('bg-rose-50', 'border-rose-200');
-          document.getElementById('feedback-header').className = 'font-bold text-rose-800 text-base mb-1 flex items-center gap-2';
-          document.getElementById('feedback-header').innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> Respuesta Incorrecta`;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario SNA - Ingeniería de Sistemas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
-        document.getElementById('feedback-text').innerText = q.explanation;
-      } else {
-        feedbackBox.classList.add('hidden');
-      }
 
-      // Estado de botones de navegación
-      document.getElementById('prev-btn').disabled = currentIndex === 0;
-      
-      const nextBtn = document.getElementById('next-btn');
-      if (currentIndex === quizData.length - 1) {
-        nextBtn.innerHTML = `Finalizar <i class="fa-solid fa-flag-checkered ms-1"></i>`;
-      } else {
-        nextBtn.innerHTML = `Siguiente <i class="fa-solid fa-arrow-right ms-1"></i>`;
-      }
+        .moodle-question-box {
+            background-color: #e0f2fe;
+            /* Azul pastel suave como la imagen */
+            border: 1px solid #bae6fd;
+        }
 
-      renderGrid();
-    }
+        .moodle-btn-gray {
+            background-color: #cbd5e1;
+            color: #1e293b;
+        }
 
-    // Alternar visibilidad de la Pista
-    function toggleHint() {
-      const hintBox = document.getElementById('hint-box');
-      hintBox.classList.toggle('hidden');
-    }
+        .moodle-btn-gray:hover {
+            background-color: #94a3b8;
+        }
+    </style>
+</head>
 
-    function getOptionStyle(optIdx) {
-      const selected = userAnswers[currentIndex];
-      const correct = quizData[currentIndex].correct;
+<body class="text-slate-800 min-h-screen flex flex-col">
 
-      if (selected === null) {
-        return 'border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-slate-700';
-      }
-      if (optIdx === correct) {
-        return 'border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold ring-1 ring-emerald-400';
-      }
-      if (optIdx === selected) {
-        return 'border-rose-500 bg-rose-50 text-rose-900 font-semibold';
-      }
-      return 'border-slate-200 bg-slate-50 opacity-60 text-slate-500';
-    }
+    <!-- Header Superior con Logo de Ingeniería de Sistemas -->
+    <header class="bg-slate-900 text-white border-b border-slate-700 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <!-- Logo de Ingeniería de Sistemas (Nodos / Red / Circuito) -->
+                <div
+                    class="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl shadow-inner">
+                    <i class="fa-solid fa-laptop-code"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="text-xs font-bold tracking-wider uppercase bg-blue-900 text-blue-200 px-2 py-0.5 rounded">EP
+                            Ingeniería de Sistemas</span>
+                        <span class="text-xs text-slate-400 hidden sm:inline">| D.L. 1439 - Ley 32069</span>
+                    </div>
+                    <h1 class="text-base md:text-lg font-bold leading-tight">Plataforma de Evaluación - SNA</h1>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="text-xs text-slate-400 block">40 Preguntas Oficiales</span>
+                <span class="text-xs font-semibold text-emerald-400" id="live-score">Aciertos: 0 / 40</span>
+            </div>
+        </div>
+    </header>
 
-    function getLetterStyle(optIdx) {
-      const selected = userAnswers[currentIndex];
-      const correct = quizData[currentIndex].correct;
+    <main class="max-w-7xl mx-auto px-4 py-6 w-full flex-1">
 
-      if (selected === null) {
-        return 'bg-slate-100 text-slate-600';
-      }
-      if (optIdx === correct) {
-        return 'bg-emerald-600 text-white';
-      }
-      if (optIdx === selected) {
-        return 'bg-rose-600 text-white';
-      }
-      return 'bg-slate-200 text-slate-400';
-    }
+        <!-- Breadcrumb (Miga de pan estilo aula virtual) -->
+        <nav class="text-xs text-slate-500 font-semibold mb-3 flex items-center gap-1.5 flex-wrap">
+            <span class="text-emerald-700 hover:underline cursor-pointer">VIRTUAL-SNA</span>
+            <span>/</span>
+            <span class="text-emerald-700 hover:underline cursor-pointer">INGENIERÍA DE SISTEMAS 2026</span>
+            <span>/</span>
+            <span class="text-slate-600">SISTEMA NACIONAL DE ABASTECIMIENTO</span>
+            <span>/</span>
+            <span class="text-rose-600 font-bold">40 PREGUNTAS TIPO EXAMEN 💯 💯</span>
+        </nav>
 
-    function selectOption(optIdx) {
-      if (userAnswers[currentIndex] !== null) return;
-      userAnswers[currentIndex] = optIdx;
-      updateStats();
-      loadQuestion();
-    }
+        <!-- Título Principal con ícono de evaluación -->
+        <div class="flex items-center gap-3 mb-6">
+            <div class="text-rose-500 text-3xl">
+                <i class="fa-regular fa-rectangle-list"></i>
+            </div>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">40 PREGUNTAS EXTRAS TIPO EXAMEN 💯 💯</h2>
+        </div>
 
-    function navigate(direction) {
-      if (direction === 1 && currentIndex === quizData.length - 1) {
-        showResults();
-        return;
-      }
-      currentIndex = Math.max(0, Math.min(quizData.length - 1, currentIndex + direction));
-      loadQuestion();
-    }
+        <!-- Contenido Principal: Grid de 2 Columnas (Estilo Moodle) -->
+        <div id="quiz-screen" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-    function jumpToQuestion(idx) {
-      currentIndex = idx;
-      loadQuestion();
-    }
+            <!-- Columna Izquierda: Tarjeta de la Pregunta + Estado (cols 1 a 8) -->
+            <div class="lg:col-span-8 space-y-4">
 
-    function updateStats() {
-      const correctCount = userAnswers.reduce((acc, curr, idx) => curr === quizData[idx].correct ? acc + 1 : acc, 0);
-      const incorrectCount = userAnswers.reduce((acc, curr, idx) => (curr !== null && curr !== quizData[idx].correct) ? acc + 1 : acc, 0);
+                <button onclick="navigate(-1)" id="back-btn"
+                    class="px-4 py-1.5 moodle-btn-gray text-xs font-bold rounded shadow-sm hover:opacity-90">
+                    Atrás
+                </button>
 
-      document.getElementById('stat-correct').innerText = correctCount;
-      document.getElementById('stat-incorrect').innerText = incorrectCount;
-    }
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
 
-    function showResults() {
-      document.getElementById('quiz-screen').classList.add('hidden');
-      document.getElementById('result-screen').classList.remove('hidden');
+                    <!-- Panel de Estado Izquierdo (Moodle) -->
+                    <div
+                        class="md:col-span-3 bg-slate-100 p-3 rounded-lg border border-slate-200 text-xs space-y-2 h-fit">
+                        <div>
+                            <span class="block text-slate-500">Pregunta</span>
+                            <span class="text-lg font-bold text-slate-800" id="moodle-q-num">1</span>
+                        </div>
+                        <hr class="border-slate-300">
+                        <div>
+                            <span class="block text-slate-500">Intentos restantes:</span>
+                            <span class="font-semibold text-slate-700">1</span>
+                        </div>
+                        <div>
+                            <span class="block text-slate-500">Se puntúa como:</span>
+                            <span class="font-semibold text-slate-700">1,00 sobre 1,00</span>
+                        </div>
+                        <hr class="border-slate-300">
+                        <button onclick="toggleHint()"
+                            class="text-emerald-700 hover:underline flex items-center gap-1 font-semibold">
+                            <i class="fa-regular fa-flag text-amber-600"></i>
+                            <span>💡 Ver Pista / Ayuda</span>
+                        </button>
+                    </div>
 
-      const correctCount = userAnswers.reduce((acc, curr, idx) => curr === quizData[idx].correct ? acc + 1 : acc, 0);
-      const incorrectCount = userAnswers.reduce((acc, curr, idx) => (curr !== null && curr !== quizData[idx].correct) ? acc + 1 : acc, 0);
-      const percent = Math.round((correctCount / quizData.length) * 100);
+                    <!-- Cuadro Celeste de Pregunta y Opciones -->
+                    <div class="md:col-span-9 moodle-question-box p-5 rounded-xl shadow-sm text-sm space-y-4">
 
-      document.getElementById('final-total').innerText = quizData.length;
-      document.getElementById('final-correct').innerText = correctCount;
-      document.getElementById('final-incorrect').innerText = incorrectCount;
-      document.getElementById('final-percentage').innerText = `${percent}%`;
-      document.getElementById('final-bar').style.width = `${percent}%`;
-    }
+                        <!-- Texto de la pregunta -->
+                        <p id="q-text" class="font-bold text-slate-900 leading-relaxed">
+                            Cargando pregunta...
+                        </p>
 
-    function restartQuiz() {
-      userAnswers = new Array(quizData.length).fill(null);
-      currentIndex = 0;
-      document.getElementById('result-screen').classList.add('hidden');
-      document.getElementById('quiz-screen').classList.remove('hidden');
-      initQuiz();
-    }
+                        <!-- Caja desplegable de Pista/Ayuda -->
+                        <div id="hint-box"
+                            class="hidden p-3 bg-amber-50 border-l-4 border-amber-400 text-amber-900 text-xs rounded-r shadow-inner">
+                            <span class="font-bold block mb-0.5"><i
+                                    class="fa-solid fa-lightbulb text-amber-500 me-1"></i> Concepto Clave:</span>
+                            <p id="hint-text"></p>
+                        </div>
 
-    // Iniciar al cargar
-    window.onload = initQuiz;
-  </script>
+                        <!-- Opciones con Radio Buttons estilo Moodle -->
+                        <div id="options-container" class="space-y-2.5 pt-2">
+                            <!-- Se insertan dinámicamente -->
+                        </div>
+
+                        <!-- Botón Comprobar -->
+                        <div class="pt-3">
+                            <button id="check-btn" onclick="checkAnswer()"
+                                class="px-5 py-2 moodle-btn-gray text-xs font-bold rounded shadow hover:bg-slate-400 transition-colors">
+                                Comprobar
+                            </button>
+                        </div>
+
+                        <!-- Caja de Alimentación Post-Comprobar -->
+                        <div id="feedback-box" class="hidden p-3 rounded-lg border text-xs leading-relaxed mt-3">
+                            <div id="feedback-title" class="font-bold mb-1"></div>
+                            <p id="feedback-text"></p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Columna Derecha: Navegación por el Cuestionario (cols 9 a 12) -->
+            <div class="lg:col-span-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3 sticky top-20">
+                    <h3 class="text-sm font-bold text-slate-800 border-b pb-2">Navegación por el cuestionario</h3>
+
+                    <!-- Grilla de números 1 al 40 -->
+                    <div id="nav-grid" class="grid grid-cols-7 sm:grid-cols-8 lg:grid-cols-7 gap-1.5">
+                        <!-- Botones 1 al 40 -->
+                    </div>
+
+                    <div class="pt-2 border-t text-right">
+                        <button onclick="finishQuiz()" class="text-xs font-bold text-emerald-700 hover:underline">
+                            Terminar intento...
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Pantalla de Resumen Final -->
+        <div id="result-screen"
+            class="hidden max-w-2xl mx-auto bg-white p-8 rounded-2xl border border-slate-200 shadow-lg text-center space-y-6 my-8">
+            <div
+                class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h2 class="text-2xl font-black text-slate-800">Resumen del Intento de Evaluación</h2>
+            <p class="text-xs text-slate-500">Sistema Nacional de Abastecimiento - Escuela de Ingeniería de Sistemas</p>
+
+            <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="bg-slate-50 p-3 rounded-xl border">
+                    <div class="text-xl font-bold text-slate-800" id="res-total">40</div>
+                    <div class="text-xs text-slate-500">Preguntas</div>
+                </div>
+                <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                    <div class="text-xl font-bold text-emerald-600" id="res-correct">0</div>
+                    <div class="text-xs text-emerald-700">Correctas</div>
+                </div>
+                <div class="bg-rose-50 p-3 rounded-xl border border-rose-200">
+                    <div class="text-xl font-bold text-rose-600" id="res-incorrect">0</div>
+                    <div class="text-xs text-rose-700">Incorrectas</div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-blue-50 rounded-xl border border-blue-200 text-left space-y-2">
+                <div class="flex justify-between text-xs font-bold text-blue-900">
+                    <span>Calificación Final:</span>
+                    <span id="res-score">0 / 20</span>
+                </div>
+                <div class="w-full bg-blue-200 h-2.5 rounded-full overflow-hidden">
+                    <div id="res-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <button onclick="restartQuiz()"
+                class="px-6 py-2.5 bg-slate-900 text-white rounded-lg font-bold text-xs hover:bg-slate-800 shadow">
+                Reintentar el cuestionario
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        // 40 Preguntas con opciones equilibradas en longitud y alternativas variadas (A, B, C, D, E)
+        const quizData = [
+            {
+                id: 1,
+                question: "001. MARCO GENERAL — ¿Cuál es la finalidad principal del Sistema Nacional de Abastecimiento (SNA) y cómo se vincula con la gestión pública?",
+                hint: "El D.L. 1439 establece que el SNA busca asegurar la provisión oportuna de bienes, servicios y obras para cumplir metas institucionales.",
+                options: [
+                    "Garantizar la fiscalización y sanción administrativa directa de los funcionarios logísticos de la entidad.",
+                    "Articular los procesos para proveer de forma oportuna y eficiente bienes, servicios y obras en favor de la ciudadanía.",
+                    "Centralizar la totalidad de los almacenes físicos del Estado en un único depósito administrado por el MEF.",
+                    "Maximizar el ahorro fiscal mediante la selección obligatoria del precio más bajo ofrecido en el mercado."
+                ],
+                correct: 1, // B
+                exp: "El SNA articula los procesos para que las entidades obtengan bienes, servicios y obras con provisión oportuna y eficiente, garantizando el cumplimiento de metas."
+            },
+            {
+                id: 2,
+                question: "002. CADENA DE ABASTECIMIENTO — ¿Cuáles son los tres componentes de la Cadena de Abastecimiento Público según el D.L. N.° 1439?",
+                hint: "Comprende la fase de planificación previa, la fase de compra/selección y la fase de gestión física/patrimonial de los recursos.",
+                options: [
+                    "Catalogación de Bienes, Subasta Inversa Electrónica y Baja Patrimonial de Activos.",
+                    "Planeamiento Estratégico, Presupuesto Institucional y Control Contralor del Gasto.",
+                    "Programación Multianual de BSyO, Gestión de Adquisiciones y Administración de Bienes.",
+                    "Certificación Presupuestal, Compromiso Anual del Gasto y Devengado del Proveedor."
+                ],
+                correct: 2, // C
+                exp: "La Cadena de Abastecimiento Público está conformada por: 1) PMBSO, 2) Gestión de Adquisiciones y 3) Administración de Bienes."
+            },
+            {
+                id: 3,
+                question: "003. ENTE RECTOR — ¿Qué rol cumple la Dirección General de Abastecimiento (DGA) del MEF en el sistema?",
+                hint: "La DGA ejerce la máxima autoridad en materia de normas, procedimientos y directivas del SNA.",
+                options: [
+                    "Ejercer la rectoría técnico-normativa, emitiendo reglas y directivas para ordenar la gestión del abastecimiento público.",
+                    "Aprobar y firmar directamente los Expedientes de Contratación de todos los ministerios del Gobierno.",
+                    "Resolver en última instancia administrativa los recursos de apelación interpuestos en licitaciones públicas.",
+                    "Auditar anualmente los estados financieros y cuentas bancarias de las empresas contratistas del Estado."
+                ],
+                correct: 0, // A
+                exp: "La DGA del MEF es la autoridad técnico-normativa a nivel nacional encargada de emitir directivas y reglamentar la Cadena de Abastecimiento."
+            },
+            {
+                id: 4,
+                question: "004. CICLO DE VIDA — ¿Por qué la gestión de abastecimiento no concluye con la firma del contrato o la compra del bien?",
+                hint: "Comprar el bien es solo el inicio; posteriormente se requiere registrarlo, conservarlo, mantenerlo y darle destino final.",
+                options: [
+                    "Porque la ley exige extender las garantías comerciales por un periodo mínimo de diez años sin excepción.",
+                    "Debido a que el pago al contratista debe diferirse hasta la culminación del periodo de gestión del titular.",
+                    "Porque la gestión abarca todo el ciclo de vida: almacenamiento, distribución, mantenimiento, custodia y disposición final.",
+                    "Porque las órdenes de compra emitidas bajo el SNA poseen vigencia indeterminada según la Ley N.º 32069."
+                ],
+                correct: 2, // C
+                exp: "La gestión no termina con la compra; abarca la Administración de Bienes durante todo su ciclo de vida útil hasta su baja o disposición."
+            },
+            {
+                id: 5,
+                question: "005. TRAZABILIDAD — ¿Cuál es la importancia fundamental de mantener la trazabilidad en la Cadena de Abastecimiento?",
+                hint: "La trazabilidad permite reconstruir el historial de cada operación y saber exactamente dónde está cada recurso.",
+                options: [
+                    "Garantizar la exoneración automática del impuesto general a las ventas para contrataciones regionales.",
+                    "Permitir reconstruir las actuaciones y conocer el estado de los recursos, facilitando el control y rendición de cuentas.",
+                    "Obligar a las entidades públicas a contratar de forma exclusiva con proveedores domiciliados en su localidad.",
+                    "Impedir la suscripción de adendas o modificaciones contractuales durante la fase de ejecución de la obra."
+                ],
+                correct: 1, // B
+                exp: "La trazabilidad permite reconstruir las actuaciones y conocer la situación de bienes, servicios u obras en cualquier etapa."
+            },
+            {
+                id: 6,
+                question: "006. ENFOQUE DE CICLO DE VIDA — ¿En qué consiste gestionar los bienes públicos bajo un enfoque de ciclo de vida?",
+                hint: "Implica considerar el bien desde su incorporación hasta su destino final o baja.",
+                options: [
+                    "Planificar la incorporación, registro, asignación, custodia, mantenimiento, aseguramiento e inventario final del bien.",
+                    "Adquirir únicamente activos fijos que cuenten con una vida útil garantizada superior a veinte años continuos.",
+                    "Renovar obligatoriamente la totalidad del parque automotor de la entidad al inicio de cada ejercicio fiscal.",
+                    "Subcontratar la administración total de los almacenes con operadores logísticos del sector privado nacional."
+                ],
+                correct: 0, // A
+                exp: "El enfoque de ciclo de vida planifica desde la necesidad e incorporación hasta el mantenimiento, conservación y destino final."
+            },
+            {
+                id: 7,
+                question: "007. PMBSO — ¿Qué es la Programación Multianual de Bienes, Servicios y Obras y cuál es su horizonte temporal?",
+                hint: "Es el proceso de planificación de necesidades con una proyección mínima de 3 años.",
+                options: [
+                    "Un informe contable trimestral presentado ante la Contraloría General para autorizar transferencias de partidas.",
+                    "Un catálogo de proveedores certificados e inhabilitados para contratar con los ministerios del Estado.",
+                    "El proceso de identificar y consolidar necesidades para un horizonte multianual mínimo de tres años consecutivos.",
+                    "La liquidación técnica y financiera de obras públicas ejecutadas mediante la modalidad de administración directa."
+                ],
+                correct: 2, // C
+                exp: "La PMBSO es el proceso mediante el cual se identifican, priorizan y consolidan necesidades por un horizonte mínimo de 3 años."
+            },
+            {
+                id: 8,
+                question: "008. CMN — ¿Qué función cumple el Cuadro Multianual de Necesidades dentro de la entidad?",
+                hint: "Es el documento normativo que organiza, consolida y prioriza las necesidades de bienes, servicios y obras.",
+                options: [
+                    "Consolidar, ordenar y priorizar las necesidades de bienes, servicios y obras para cumplir las metas institucionales.",
+                    "Aprobar el presupuesto general de la república enviado por el Poder Ejecutivo al Congreso de la República.",
+                    "Registrar la lista de contratistas sancionados con penalidad por mora durante el ejercicio presupuestal anterior.",
+                    "Autorizar el desembolso directo de viáticos e insumos menores mediante la caja chica de la administración."
+                ],
+                correct: 0, // A
+                exp: "El CMN es el producto final de la PMBSO que organiza y prioriza todas las necesidades cuantificadas de la entidad."
+            },
+            {
+                id: 9,
+                question: "009. PRONÓSTICO DE DEMANDA — ¿Cómo contribuye el pronóstico de demanda a la identificación de necesidades?",
+                hint: "Permite usar estadísticas e historial para prever consumos futuros y evitar compras desordenadas.",
+                options: [
+                    "Reemplazar de forma definitiva la necesidad de contar con un Presupuesto Institucional de Apertura.",
+                    "Anticipar los requerimientos basándose en datos e historial, evitando compras improvisadas o por urgencia.",
+                    "Determinar de forma automática la empresa ganadora de la Buena Pro en selecciones competitivas.",
+                    "Eliminar la fase de priorización presupuestal en la formulación del Cuadro Multianual de Necesidades."
+                ],
+                correct: 1, // B
+                exp: "El pronóstico de demanda utiliza información técnica e histórica para anticipar necesidades reales y evitar compras imprevistas."
+            },
+            {
+                id: 10,
+                question: "010. FASES DE LA PMBSO — ¿Cuáles son las tres fases secuenciales de la Programación Multianual?",
+                hint: "Comienza reconociendo lo que se necesita, luego clasificando por importancia y finalmente aprobando el documento.",
+                options: [
+                    "Convocatoria del Proceso, Evaluación de Propuestas Técnicas y Otorgamiento de la Buena Pro.",
+                    "Alta Patrimonial, Inventario Físico de Almacén y Baja de Bienes por Obsolescencia Técnica.",
+                    "Identificación; Clasificación y Priorización; y Consolidación y Aprobación del Cuadro de Necesidades.",
+                    "Certificación de Crédito Presupuestario, Compromiso Anual del Gasto y Liquidación de Pagos."
+                ],
+                correct: 2, // C
+                exp: "Las tres fases normadas de la PMBSO son: 1. Identificación, 2. Clasificación y Priorización, y 3. Consolidación y Aprobación."
+            },
+            {
+                id: 11,
+                question: "011. FASE DE IDENTIFICACIÓN — ¿Cuál es el objetivo de la primera fase de la PMBSO?",
+                hint: "Las áreas usuarias determinan formalmente qué insumos requieren para cumplir con sus metas del POI.",
+                options: [
+                    "Reconocer las necesidades de bienes, servicios y obras requeridas por las áreas usuarias para sus metas.",
+                    "Seleccionar a las empresas privadas que participarán en las licitaciones públicas de la entidad.",
+                    "Calcular el monto máximo de penalidades aplicables a los proveedores por incumplimiento de plazos.",
+                    "Aprobar los Reglamentos de Organización y Funciones de la Oficina General de Administración."
+                ],
+                correct: 0, // A
+                exp: "En la fase de Identificación, las áreas usuarias cuantifican y sustentan sus necesidades en función de sus actividades y metas."
+            },
+            {
+                id: 12,
+                question: "012. TRABAJO COLABORATIVO — ¿Por qué la PMBSO exige coordinación constante entre las dependencias de la entidad?",
+                hint: "Requiere el trabajo articulado entre quienes piden (Área Usuaria), quienes gestionan compras (Abastecimiento) y quienes dan presupuesto (Presupuesto).",
+                options: [
+                    "Porque se requiere la firma manuscrita de la totalidad de los servidores públicos para validar el proceso.",
+                    "Porque combina el requerimiento operativo (Área Usuaria), la logística (Abastecimiento) y el marco de recursos (Presupuesto).",
+                    "Para evitar la implementación de sistemas informáticos centralizados como el módulo SIGA-MEF.",
+                    "Debido a que la responsabilidad penal por desabastecimiento recae sobre todos los empleados institucionales."
+                ],
+                correct: 1, // B
+                exp: "La PMBSO requiere sinergia entre el área usuaria (necesidad), abastecimiento (organización) y presupuesto (marco financiero)."
+            },
+            {
+                id: 13,
+                question: "013. APM — ¿Qué es la Asignación Presupuestaria Multianual y qué impacto tiene en el CMN?",
+                hint: "Es el techo presupuestal informado por el MEF para un horizonte de 3 años.",
+                options: [
+                    "La transferencia bancaria directa realizada por el Banco de la Nación a las cuentas de los proveedores.",
+                    "El monto total recaudado por la entidad por concepto de tasas administrativas durante el ejercicio fiscal.",
+                    "El límite máximo de recursos presupuestarios asignado por el MEF a un pliego, sirviendo de techo para programar.",
+                    "El fondo de reserva de contingencia destinado exclusivamente al pago de sentencias judiciales firmes."
+                ],
+                correct: 2, // C
+                exp: "La APM establece el límite financiero máximo que debe observar la entidad para ajustar y equilibrar su CMN."
+            },
+            {
+                id: 14,
+                question: "014. DEFICIENCIAS EN PROGRAMACIÓN — ¿Qué consecuencias genera una deficiente programación de necesidades?",
+                hint: "Provoca desabastecimiento, sobrecostos por compras urgentes o acumulación innecesaria en almacenes.",
+                options: [
+                    "Genera desabastecimiento, compras de urgencia, duplicidades o existencias innecesarias que impiden metas.",
+                    "Aumenta automáticamente el salario del personal técnico de la Oficina Encargada de las Contrataciones.",
+                    "Provoca la cancelación inmediata de la personería jurídica e institucional del pliego correspondiente.",
+                    "Exime a la entidad de rendir cuentas anuales ante la Contraloría General de la República."
+                ],
+                correct: 0, // A
+                exp: "Programar mal ocasiona desabastecimiento, compras apuradas a sobreprecio o stocks inútiles en almacén."
+            },
+            {
+                id: 15,
+                question: "015. VÍNCULO PMBSO Y PREPARATORIAS — ¿Cómo se relaciona la PMBSO con la fase de Actuaciones Preparatorias?",
+                hint: "El CMN proporciona la información base de qué y cuándo comprar para armar el requerimiento.",
+                options: [
+                    "Permite omitir la indagación de mercado y adjudicar el contrato de forma directa al proveedor tradicional.",
+                    "Proporciona la información previa de qué se requiere y cuándo, sirviendo de base para armar el requerimiento.",
+                    "Sustituye el requisito legal de contar con Bases Integradas en los procedimientos de selección.",
+                    "Modifica los plazos para interponer recursos de apelación ante el Tribunal de Contrataciones."
+                ],
+                correct: 1, // B
+                exp: "La información del CMN sirve de insumo directo para estructurar el requerimiento, la estrategia y las actuaciones preparatorias."
+            },
+
+            // SESIÓN 3: ACTUACIONES PREPARATORIAS (16 al 23)
+            {
+                id: 16,
+                question: "016. ACTUACIONES PREPARATORIAS — ¿Cuál es el propósito central de la etapa preparatoria en la contratación pública?",
+                hint: "Es la etapa donde se organiza la compra: requerimiento, estudio de mercado, estrategia y expediente de contratación.",
+                options: [
+                    "Ejecutar los desembolsos económicos finales a favor de las empresas ganadoras de la Buena Pro.",
+                    "Definir con precisión la necesidad y organizar de forma informada las decisiones previas a la convocatoria.",
+                    "Realizar la auditoría a posteriori de los suministros consumidos durante el ejercicio fiscal anterior.",
+                    "Suscribir las actas definitivas de recepción y conformidad de obras de infraestructura pública."
+                ],
+                correct: 1, // B
+                exp: "Las actuaciones preparatorias organizan decisiones clave (requerimiento, mercado, expediente y bases) antes de convocar."
+            },
+            {
+                id: 17,
+                question: "017. SEGMENTACIÓN — ¿En qué consiste la segmentación de contrataciones y cuál es su objetivo?",
+                hint: "Clasifica las compras en categorías según su impacto y riesgo para aplicar la mejor estrategia.",
+                options: [
+                    "Dividir una compra de gran volumen en pequeñas compras para evitar convocar a Licitación Pública.",
+                    "Clasificar las contrataciones por categorías según su cuantía y riesgo para lograr el mayor valor por el dinero.",
+                    "Separar los comprobantes de pago emitidos por los proveedores según la fecha de su vencimiento.",
+                    "Asignar correlativamente códigos de inventario a los equipos de cómputo adquiridos por la entidad."
+                ],
+                correct: 1, // B
+                exp: "La segmentación agrupa las compras por categorías y niveles de riesgo para optimizar la estrategia de adquisición."
+            },
+            {
+                id: 18,
+                question: "018. REQUERIMIENTO — ¿Por qué el requerimiento formulado por el área usuaria debe ser claro y objetivo?",
+                hint: "Evita que el requerimiento favorezca a una marca específica o que genere ofertas insatisfactorias.",
+                options: [
+                    "Para garantizar que un único fabricante local resulte adjudicado de forma exclusiva en el proceso.",
+                    "Porque de ser ambiguo o sesgado, generará ofertas inadecuadas, controversias o insatisfacción pública.",
+                    "Para evitar que empresas extranjeras participen en los procedimientos de selección convocados.",
+                    "Debido a que la normativa prohíbe realizar precisiones o aclaraciones durante la consulta a bases."
+                ],
+                correct: 1, // B
+                exp: "Un requerimiento claro y bien definido garantiza libre concurrencia y asegura la obtención del resultado deseado."
+            },
+            {
+                id: 19,
+                question: "019. ESTRATEGIA DE CONTRATACIÓN — ¿Qué función cumple la estrategia de contratación en el proceso?",
+                hint: "Es la hoja de ruta que evalúa el mercado y los riesgos para elegir el mejor camino de compra.",
+                options: [
+                    "Un plan publicitario utilizado por los postores para promocionar sus productos ante el comité.",
+                    "Organizar decisiones evaluando mercado, riesgos y modalidades para lograr el mayor valor por el dinero.",
+                    "La solicitud de ampliación presupuestal remitida por el titular del pliego ante la Comisión de Presupuesto.",
+                    "El recurso de impugnación presentado por los participantes ante el Tribunal del OECE."
+                ],
+                correct: 1, // B
+                exp: "La estrategia define la modalidad, envasado de lotes y mitigación de riesgos para maximizar el valor del dinero público."
+            },
+            {
+                id: 20,
+                question: "020. INTERACCIÓN CON EL MERCADO — ¿Cuál es el objetivo de interactuar con el mercado previo a la convocatoria?",
+                hint: "Permite saber si lo que pide la entidad existe comercialmente, a qué precios y bajo qué condiciones.",
+                options: [
+                    "Recopilar información del mercado para validar el requerimiento y conocer las condiciones comerciales.",
+                    "Acordar en privado el precio final de adjudicación directamente con un proveedor determinado.",
+                    "Otorgar la Buena Pro de manera anticipada antes de publicar las bases en el sistema SEACE.",
+                    "Inspeccionar las instalaciones administrativas de todos los postores inscritos en el RNP."
+                ],
+                correct: 0, // A
+                exp: "Interaccionar con el mercado permite verificar la viabilidad del requerimiento y optimizar las condiciones contractuales."
+            },
+            {
+                id: 21,
+                question: "021. DEFINICIÓN VS REQUERIMIENTO — ¿Cuál es la distinción conceptual entre 'necesidad' y 'requerimiento'?",
+                hint: "La necesidad es el problema a resolver; el requerimiento es el documento formal con especificaciones técnicas.",
+                options: [
+                    "No existe diferencia; ambos términos son legalmente sinónimos en la normativa de contrataciones.",
+                    "La necesidad identifica el problema a atender; el requerimiento la traduce en especificaciones técnicas concretas.",
+                    "La necesidad la define el proveedor y el requerimiento lo aprueba la Contraloría General.",
+                    "El requerimiento se elabora en la ejecución contractual y la necesidad al momento del pago."
+                ],
+                correct: 1, // B
+                exp: "La necesidad identifica el problema o meta pública; el requerimiento traduce esa necesidad en condiciones técnicas."
+            },
+            {
+                id: 22,
+                question: "022. EXPEDIENTE DE CONTRATACIÓN — ¿Qué rol cumple el Expediente de Contratación en la etapa preparatoria?",
+                hint: "Es la carpeta técnica que contiene todos los sustentos legales, económicos y técnicos de la contratación.",
+                options: [
+                    "Compilar y respaldar documentalmente todas las actuaciones que sustentan la legalidad y viabilidad de la compra.",
+                    "Autorizar la cancelación de facturas electrónicas pendientes de pago de ejercicios anteriores.",
+                    "Servir como comprobante de pago frente a la Superintendencia Nacional de Aduanas y Administración Tributaria.",
+                    "Inscribir la titularidad de los bienes inmuebles estatales en los registros públicos de la SUNARP."
+                ],
+                correct: 0, // A
+                exp: "El expediente reúne los documentos que sustentan las actuaciones desde el requerimiento hasta la culminación del contrato."
+            },
+            {
+                id: 23,
+                question: "023. EVALUADORES — ¿Por qué es crítico designar a los evaluadores o comité antes de lanzar la selección?",
+                hint: "Asigna formalmente la responsabilidad técnica a profesionales calificados para conducir la evaluación.",
+                options: [
+                    "Para eximir de responsabilidad administrativa al titular de la entidad en caso de controversias.",
+                    "Garantizar que la conducción del proceso y evaluación de ofertas recaiga en personas idóneas y responsables.",
+                    "Asegurar que la oferta económica de mayor valor monetario resulte ganadora en la selección.",
+                    "Sustituir la necesidad de publicar las bases integradas en el portal del sistema SEACE."
+                ],
+                correct: 1, // B
+                exp: "Los evaluadores asumen la responsabilidad técnica de seleccionar la oferta conforme a las bases e igualdad de trato."
+            },
+
+            // SESIÓN 4: FASE DE SELECCIÓN (24 al 29)
+            {
+                id: 24,
+                question: "024. PROCEDIMIENTO DE SELECCIÓN — ¿Qué es un procedimiento de selección y cuál es su fin primordial?",
+                hint: "Es el proceso administrativo donde se evalúan ofertas competitivas para elegir la propuesta ganadora.",
+                options: [
+                    "Un juicio penal tramitado ante el Poder Judicial para sancionar delitos cometidos por funcionarios.",
+                    "Un procedimiento administrativo para evaluar ofertas, seleccionar la opción conveniente y perfeccionar el contrato.",
+                    "Una auditoría de estados financieros realizada por una firma externa e independiente.",
+                    "Un acto de negociación privada entre la entidad pública y empresas internacionales sin regulación."
+                ],
+                correct: 1, // B
+                exp: "Su objetivo es seleccionar la mejor propuesta del mercado para satisfacer la necesidad pública y firmar el contrato."
+            },
+            {
+                id: 25,
+                question: "025. COMPETITIVO VS NO COMPETITIVO — ¿Qué diferencia a un procedimiento competitivo de uno no competitivo?",
+                hint: "El competitivo convoca libremente al mercado; el no competitivo aplica excepcionalmente (ej. proveedor único).",
+                options: [
+                    "El competitivo se realiza sin presupuesto y el no competitivo requiere certificación del gasto.",
+                    "El competitivo convoca al mercado para comparar ofertas; el no competitivo aplica solo en supuestos legales específicos.",
+                    "El no competitivo permite comprar sin límites de precio ni fiscalización a posteriori del órgano de control.",
+                    "El competitivo aplica solo para la construcción de obras e infraestructura y el no competitivo para consultorías."
+                ],
+                correct: 1, // B
+                exp: "Los procesos competitivos comparan ofertas en igualdad de trato; los no competitivos proceden solo por causal legal sustentada."
+            },
+            {
+                id: 26,
+                question: "026. ETAPAS DEL PROCESO — ¿Cuál es la secuencia lógica de etapas en un procedimiento competitivo?",
+                hint: "Inicia convocando, pasa por consultas a bases, integración, evaluación de propuestas y adjudicación de la Buena Pro.",
+                options: [
+                    "Convocatoria, cuestionamiento a bases, integración de bases, evaluación de ofertas y otorgamiento de la Buena Pro.",
+                    "Elaboración del CMN, Asignación Presupuestal, Emisión de Orden de Compra y Desembolso de Pago.",
+                    "Alta Patrimonial, Inventario Físico de Almacén, Mantenimiento y Disposición Final del Bien.",
+                    "Solicitud de Cotización, Cuadro Comparativo, Conformidad Técnica y Cancelación de Factura."
+                ],
+                correct: 0, // A
+                exp: "Comprende: Convocatoria, consultas/observaciones, integración de bases, evaluación de ofertas y Buena Pro."
+            },
+            {
+                id: 27,
+                question: "027. BASES INTEGRADAS — ¿Qué significan las Bases Integradas dentro del procedimiento de selección?",
+                hint: "Son las reglas definitivas e inalterables fijadas tras absolver todas las consultas de los participantes.",
+                options: [
+                    "Reemplazar al contrato suscrito en caso de que el contratista decida no presentarse a la firma.",
+                    "Son las reglas definitivas del proceso tras absolver consultas y observaciones, de obligatorio cumplimiento.",
+                    "Inhabilitar de forma automática a los postores que hayan formulado consultas al pliego.",
+                    "Aumentar unilateralmente el presupuesto institucional aprobado para la contratación."
+                ],
+                correct: 1, // B
+                exp: "Las bases integradas constituyen las reglas de juego definitivas e inalterables del proceso de selección."
+            },
+            {
+                id: 28,
+                question: "028. CUESTIONAMIENTO A BASES — ¿Qué función cumple la etapa de consultas y observaciones a las bases?",
+                hint: "Permite a los proveedores aclarar dudas o advertir contravenciones a la norma antes de la integración.",
+                options: [
+                    "Permitir que los postores reduzcan en secreto sus montos económicos ofertados.",
+                    "Brindar un mecanismo legal para solicitar aclaraciones o advertir vulneraciones, corrigiendo las bases.",
+                    "Suspender por tiempo indefinido la totalidad de las compras públicas de la entidad.",
+                    "Reemplazar al comité de selección por un árbitro único designado por el OSCE."
+                ],
+                correct: 1, // B
+                exp: "Permite aclarar o corregir aspectos de las bases antes de que se conviertan en reglas definitivas e integradas."
+            },
+            {
+                id: 29,
+                question: "029. ELECCIÓN DEL PROCESO — ¿Qué factores debe ponderar la entidad para elegir el tipo de procedimiento aplicable?",
+                hint: "Debe considerar el objeto (bien, servicio u obra), la cuantía en soles y la complejidad del requerimiento.",
+                options: [
+                    "Únicamente la celeridad del trámite y la preferencia del encargado de compras.",
+                    "El objeto de la contratación, la cuantía, complejidad y los supuestos establecidos en la ley.",
+                    "La ubicación geográfica del domicilio fiscal de la empresa participante.",
+                    "La cantidad total de folios que contenga el expediente de contratación."
+                ],
+                correct: 1, // B
+                exp: "La elección del procedimiento responde al objeto, cuantía y supuestos normativos, no a la preferencia del funcionario."
+            },
+
+            // SESIÓN 5: EJECUCIÓN CONTRACTUAL (30 al 35)
+            {
+                id: 30,
+                question: "030. CONTRATO PÚBLICO — ¿Cómo se define el contrato público bajo el marco normativo de contrataciones?",
+                hint: "Es el acuerdo regulado que vincula a la Entidad y al contratista para la entrega de prestaciones.",
+                options: [
+                    "Un acuerdo privado de partes regido exclusivamente por las disposiciones del Código Civil.",
+                    "El acuerdo normado que crea o modifica una relación jurídica entre la Entidad y el contratista para prestaciones.",
+                    "Una promesa verbal de pago emitida por el jefe de la oficina de logística.",
+                    "Un certificado bancario de depósito emitido a favor del Ministerio de Economía."
+                ],
+                correct: 1, // B
+                exp: "El contrato público crea, regula, modifica o extingue una relación jurídica en el marco del derecho administrativo."
+            },
+            {
+                id: 31,
+                question: "031. REGISTRO EN SEACE — ¿Por qué la Ley exige registrar el contrato en el SEACE dentro de los 10 días hábiles?",
+                hint: "Permite transparentar la información ante la ciudadanía y los organismos de control.",
+                options: [
+                    "Para aplicar retenciones del impuesto a la renta en tiempo real con la SUNAT.",
+                    "Garantizar la publicidad, transparencia y trazabilidad de la contratación ante la ciudadanía y control.",
+                    "Evitar que otras entidades puedan contratar servicios con la misma empresa.",
+                    "Obtener el visto bueno formal de los organismos multilaterales de crédito."
+                ],
+                correct: 1, // B
+                exp: "El registro en SEACE es una obligación de transparencia pública que permite dar seguimiento a la gestión contractual."
+            },
+            {
+                id: 32,
+                question: "032. EJECUCIÓN CONTRACTUAL — ¿En qué consiste la etapa de ejecución contractual?",
+                hint: "Comprende la entrega de los bienes o servicios, el seguimiento, la conformidad técnica y el pago final.",
+                options: [
+                    "La fase preparatoria en que se aprueba el presupuesto institucional de apertura.",
+                    "El periodo donde las partes cumplen sus prestaciones: seguimiento, conformidad, pago y modificaciones.",
+                    "El procedimiento administrativo sancionador aplicado a postores no presentados.",
+                    "El remate público de bienes muebles declarados en baja patrimonial por almacén."
+                ],
+                correct: 1, // B
+                exp: "Es la fase en que el contratista ejecuta las prestaciones y la entidad verifica, otorga conformidad y cancela."
+            },
+            {
+                id: 33,
+                question: "033. MODIFICACIÓN CONTRACTUAL — ¿Cuál es el límite esencial al realizar modificaciones al contrato vigentes?",
+                hint: "Se pueden realizar cambios necesarios, pero sin romper el equilibrio económico ni cambiar el objeto.",
+                options: [
+                    "Permitir al contratista cambiar libremente el objeto del contrato por uno totalmente distinto.",
+                    "Ajustar el contrato para cumplir la finalidad pública, sin alterar el equilibrio económico ni la esencia del objeto.",
+                    "Duplicar el monto contractual sin requerir sustento técnico ni disponibilidad presupuestal.",
+                    "Sustituir al contratista adjudicado por otra empresa subcontratada sin autorización."
+                ],
+                correct: 1, // B
+                exp: "Las modificaciones responden a la finalidad pública pero no deben alterar el equilibrio contractual ni el objeto principal."
+            },
+            {
+                id: 34,
+                question: "034. EQUILIBRIO ECONÓMICO — ¿Qué significa preservar el equilibrio económico-financiero del contrato?",
+                hint: "Mantiene la proporción entre lo que entrega el proveedor y el pago que recibe de la entidad.",
+                options: [
+                    "Garantizar que el contratista obtenga márgenes de utilidad netos superiores al 50%.",
+                    "Mantener la equivalencia entre prestaciones y contraprestaciones acordadas originalmente entre las partes.",
+                    "Eximir a la Entidad de la obligación de tramitar adicionales o mayores metrados de obra.",
+                    "Fijar un tipo de cambio monetario congelado para compras en moneda extranjera."
+                ],
+                correct: 1, // B
+                exp: "Preserva la equivalencia original de cargas e ingresos asumidos por la Entidad y el contratista."
+            },
+            {
+                id: 35,
+                question: "035. CONFORMIDAD DE PRESTACIÓN — ¿Qué función cumple la verificación técnica antes de emitir la conformidad?",
+                hint: "Comprueba que los bienes o servicios entregados cumplen al 100% las especificaciones de las bases.",
+                options: [
+                    "Comprobar que las prestaciones se ejecutaron conforme a lo estipulado, siendo requisito indispensable para el pago.",
+                    "Validar que el proveedor haya pagado sus tributos ante la municipalidad correspondiente.",
+                    "Sustituir la inspección física de los almacenes por una declaración jurada simple.",
+                    "Determinar incrementos salariales para los especialistas de la Oficina de Abastecimiento."
+                ],
+                correct: 0, // A
+                exp: "La verificación del cumplimiento sustenta la emisión de la conformidad técnica y autoriza el pago correspondiente."
+            },
+
+            // SESIÓN 6: ADMINISTRACIÓN DE BIENES (36 al 40)
+            {
+                id: 36,
+                question: "036. ADMINISTRACIÓN DE BIENES — ¿Qué comprende el componente de Administración de Bienes en el SNA?",
+                hint: "Se ocupa de la recepción, almacenamiento, distribución, mantenimiento y disposición final de los activos.",
+                options: [
+                    "La adquisición exclusiva de suministros de oficina y papelería para las sedes centrales.",
+                    "La gestión integral de bienes muebles e inmuebles: recepción, registro, custodia, mantenimiento y destino final.",
+                    "La elaboración de términos de referencia para la contratación de consultorías individuales.",
+                    "El cobro de tasas administrativas por concepto de licencias de edificación urbana."
+                ],
+                correct: 1, // B
+                exp: "Comprende el almacenamiento, distribución, mantenimiento, inventario, baja y disposición final de bienes muebles e inmuebles."
+            },
+            {
+                id: 37,
+                question: "037. ALTA VS ADQUISICIÓN — ¿Cuál es la diferencia entre el 'alta patrimonial' y la 'adquisición' de un bien?",
+                hint: "La adquisición es el título de compra/donación; el Alta es el acto administrativo que lo ingresa al registro de la entidad.",
+                options: [
+                    "Son términos legalmente idénticos que no poseen diferencia técnica en contabilidad pública.",
+                    "La adquisición es la forma de obtención (compra/donación); el alta es el acto administrativo que lo registra en el patrimonio.",
+                    "El alta patrimonial la aprueba la SUNAT y la adquisición la realiza la empresa contratista.",
+                    "La adquisición se aplica solo a terrenos e inmuebles y el alta a bienes intangibles."
+                ],
+                correct: 1, // B
+                exp: "Adquirir es la forma de obtener la propiedad (compra, donación); el alta es el ingreso formal al registro patrimonial."
+            },
+            {
+                id: 38,
+                question: "038. INVENTARIO FÍSICO — ¿Cuál es el objetivo principal de realizar el inventario físico anual de bienes?",
+                hint: "Constatar que lo que figura en los libros contables exista físicamente en las oficinas y almacenes.",
+                options: [
+                    "Vender en subasta pública los bienes que cuenten con más de un año de antigüedad.",
+                    "Verificar la presencia física, ubicación y estado de los bienes, conciliando los registros patrimoniales y contables.",
+                    "Sancionar de forma inmediata al personal encargado de los depósitos de almacenamiento.",
+                    "Duplicar el valor de depreciación de los activos fijos registrados en el balance anual."
+                ],
+                correct: 1, // B
+                exp: "El inventario físico constata la existencia real de los activos, su ubicación y estado, conciliando patrimonio con contabilidad."
+            },
+            {
+                id: 39,
+                question: "039. SOBRANTES Y FALTANTES — ¿Cómo se diferencian un 'bien sobrante' y un 'bien faltante' en el inventario?",
+                hint: "Sobrante = existe físicamente pero no en papel. Faltante = existe en papel pero no está en la oficina.",
+                options: [
+                    "El sobrante está en el almacén central y el faltante en custodia del titular de la entidad.",
+                    "El sobrante existe físicamente pero no está en registros; el faltante está registrado pero no se ubica físicamente.",
+                    "El faltante es un bien recibido por donación y el sobrante es un bien comprado mediante licitación.",
+                    "El sobrante implica responsabilidad penal directa y el faltante se regulariza con nota de crédito."
+                ],
+                correct: 1, // B
+                exp: "Sobrante: físicamente presente sin registro; Faltante: registrado en libros pero físicamente no ubicado."
+            },
+            {
+                id: 40,
+                question: "040. DIRECTIVA DE ALMACENAMIENTO — ¿Qué norma la Directiva N.° 0004-2021-EF/54.01 en el marco del SNA?",
+                hint: "Establece las reglas para la recepción, ingreso, custodia, trazabilidad y distribución de bienes muebles en almacenes.",
+                options: [
+                    "Las sanciones aplicables a los comités de selección por retrasos en el otorgamiento de la Buena Pro.",
+                    "Los procedimientos para la recepción, verificación, custodia, trazabilidad y distribución eficiente en almacenes.",
+                    "La metodología para la formulación de proyectos de inversión pública en infraestructura vial.",
+                    "Los salarios mínimos aplicables a los consultores contratados por los pliegos del Gobierno."
+                ],
+                correct: 1, // B
+                exp: "Regula la gestión de almacenamiento y distribución de bienes muebles para asegurar trazabilidad, seguridad y conservación."
+            }
+        ];
+
+        let currentQ = 0;
+        let answers = new Array(quizData.length).fill(null);
+        let checkedState = new Array(quizData.length).fill(false);
+        let selectedOptionTemp = null;
+
+        function init() {
+            renderNavGrid();
+            loadQuestion();
+        }
+
+        function renderNavGrid() {
+            const grid = document.getElementById('nav-grid');
+            grid.innerHTML = '';
+            quizData.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `nav-btn-${idx}`;
+                btn.innerText = idx + 1;
+                btn.onclick = () => jumpTo(idx);
+                btn.className = `h-8 w-full text-xs font-bold rounded border transition-all flex items-center justify-center ${getNavStyle(idx)}`;
+                grid.appendChild(btn);
+            });
+        }
+
+        function getNavStyle(idx) {
+            if (idx === currentQ) {
+                return 'border-2 border-slate-900 font-extrabold bg-white text-slate-900 shadow-sm';
+            }
+            if (!checkedState[idx]) {
+                return 'border-slate-300 bg-white text-slate-700 hover:bg-slate-100';
+            }
+            if (answers[idx] === quizData[idx].correct) {
+                return 'border-emerald-500 bg-emerald-100 text-emerald-800 font-bold';
+            }
+            return 'border-rose-400 bg-rose-100 text-rose-800 font-bold';
+        }
+
+        function loadQuestion() {
+            const q = quizData[currentQ];
+            selectedOptionTemp = answers[currentQ];
+
+            document.getElementById('moodle-q-num').innerText = currentQ + 1;
+            document.getElementById('q-text').innerText = q.question;
+            document.getElementById('hint-text').innerText = q.hint;
+            document.getElementById('hint-box').classList.add('hidden');
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const letters = ['a', 'b', 'c', 'd', 'e'];
+            const isChecked = checkedState[currentQ];
+
+            q.options.forEach((opt, idx) => {
+                const isSelected = selectedOptionTemp === idx;
+
+                const div = document.createElement('label');
+                div.className = `flex items-start gap-3 p-2.5 rounded-lg border cursor-pointer transition-colors text-xs md:text-sm ${getOptionClass(idx, isChecked)}`;
+
+                div.innerHTML = `
+          <input type="radio" name="moodle-opt" value="${idx}" ${isSelected ? 'checked' : ''} ${isChecked ? 'disabled' : ''} onchange="selectTemp(${idx})" class="mt-0.5 text-blue-600 focus:ring-blue-500">
+          <span class="font-bold text-slate-600 lowercase shrink-0">${letters[idx]}.</span>
+          <span class="text-slate-800 leading-snug">${opt}</span>
+        `;
+                container.appendChild(div);
+            });
+
+            // Feedback y botón comprobar
+            const checkBtn = document.getElementById('check-btn');
+            const feedbackBox = document.getElementById('feedback-box');
+
+            if (isChecked) {
+                checkBtn.disabled = true;
+                checkBtn.className = 'px-5 py-2 moodle-btn-gray text-xs font-bold rounded opacity-50 cursor-not-allowed';
+
+                feedbackBox.classList.remove('hidden');
+                const isCorrect = answers[currentQ] === q.correct;
+
+                if (isCorrect) {
+                    feedbackBox.className = 'p-3 rounded-lg border text-xs leading-relaxed mt-3 bg-emerald-50 border-emerald-300 text-emerald-900';
+                    document.getElementById('feedback-title').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> ¡Respuesta Correcta!';
+                } else {
+                    feedbackBox.className = 'p-3 rounded-lg border text-xs leading-relaxed mt-3 bg-rose-50 border-rose-300 text-rose-900';
+                    document.getElementById('feedback-title').innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600"></i> Respuesta Incorrecta';
+                }
+                document.getElementById('feedback-text').innerText = q.exp;
+            } else {
+                checkBtn.disabled = false;
+                checkBtn.className = 'px-5 py-2 moodle-btn-gray text-xs font-bold rounded shadow hover:bg-slate-400 transition-colors';
+                feedbackBox.classList.add('hidden');
+            }
+
+            // Deshabilitar Atrás en la primera pregunta
+            document.getElementById('back-btn').disabled = currentQ === 0;
+            document.getElementById('back-btn').style.opacity = currentQ === 0 ? '0.5' : '1';
+
+            renderNavGrid();
+            updateScoreHeader();
+        }
+
+        function getOptionClass(idx, isChecked) {
+            if (!isChecked) {
+                return 'border-slate-200 bg-white hover:bg-slate-50';
+            }
+            const isCorrect = idx === quizData[currentQ].correct;
+            const isUserSelected = idx === answers[currentQ];
+
+            if (isCorrect) {
+                return 'border-emerald-400 bg-emerald-50 font-medium';
+            }
+            if (isUserSelected && !isCorrect) {
+                return 'border-rose-400 bg-rose-50 font-medium';
+            }
+            return 'border-slate-200 bg-slate-50 opacity-60';
+        }
+
+        function selectTemp(idx) {
+            if (checkedState[currentQ]) return;
+            selectedOptionTemp = idx;
+        }
+
+        function checkAnswer() {
+            if (selectedOptionTemp === null) {
+                alert("Por favor selecciona una alternativa antes de comprobar.");
+                return;
+            }
+            answers[currentQ] = selectedOptionTemp;
+            checkedState[currentQ] = true;
+            loadQuestion();
+        }
+
+        function toggleHint() {
+            const hint = document.getElementById('hint-box');
+            hint.classList.toggle('hidden');
+        }
+
+        function jumpTo(idx) {
+            currentQ = idx;
+            loadQuestion();
+        }
+
+        function navigate(dir) {
+            currentQ = Math.max(0, Math.min(quizData.length - 1, currentQ + dir));
+            loadQuestion();
+        }
+
+        function updateScoreHeader() {
+            const correct = answers.reduce((acc, curr, idx) => (checkedState[idx] && curr === quizData[idx].correct) ? acc + 1 : acc, 0);
+            document.getElementById('live-score').innerText = `Aciertos: ${correct} / 40`;
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const correct = answers.reduce((acc, curr, idx) => (checkedState[idx] && curr === quizData[idx].correct) ? acc + 1 : acc, 0);
+            const incorrect = answers.reduce((acc, curr, idx) => (checkedState[idx] && curr !== quizData[idx].correct) ? acc + 1 : acc, 0);
+            const score20 = ((correct / quizData.length) * 20).toFixed(1);
+            const percent = Math.round((correct / quizData.length) * 100);
+
+            document.getElementById('res-total').innerText = quizData.length;
+            document.getElementById('res-correct').innerText = correct;
+            document.getElementById('res-incorrect').innerText = incorrect;
+            document.getElementById('res-score').innerText = `${score20} / 20.0 (${percent}%)`;
+            document.getElementById('res-bar').style.width = `${percent}%`;
+        }
+
+        function restartQuiz() {
+            answers = new Array(quizData.length).fill(null);
+            checkedState = new Array(quizData.length).fill(false);
+            currentQ = 0;
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            init();
+        }
+
+        window.onload = init;
+    </script>
 </body>
+
 </html>
